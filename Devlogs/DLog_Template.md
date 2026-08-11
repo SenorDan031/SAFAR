@@ -41,18 +41,6 @@
 4. **Only important entries should be made.**  
    Do not record routine, insignificant, or irrelevant activities.
 
-5. **If another member wants to register an entry:**  
-   Mention their name and GitHub profile using the `######` heading format, followed by their content.
-
-   **Example:**
-
-   ###### [Member Name](GITHUB PROFILE LINK)
-
-   - Content here
-   - Content here
-
-   This is required only when the author changes. If the same author continues the DLog, simply add the new points.
-
 ---
 
 **DLog Template End**
