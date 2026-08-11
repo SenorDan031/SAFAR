@@ -20,23 +20,23 @@ The **SAFAR** project was officially established with the creation of its centra
 
 - Essential commands to check :
 
-    - # Go to SAFAR project;    cd $projectRoot
+    - **Go to SAFAR project**;    cd $projectRoot
 
-    -  # Create the Python; 3.7 environment    py -3.7 -m venv $venvPath
+    -  **Create the Python**; 3.7 environment    py -3.7 -m venv $venvPath
 
-    -  # Activate it;    & "$venvPath\Scripts\Activate.ps1"
+    -  **Activate it**;    & "$venvPath\Scripts\Activate.ps1"
 
-    -  # Install CARLA Python API;    python -m pip install "$carlaRoot\PythonAPI\carla\dist\carla-0.9.15-cp37-cp37m-win_amd64.whl"
+    -  **Install CARLA Python API**;    python -m pip install "$carlaRoot\PythonAPI\carla\dist\carla-0.9.15-cp37-cp37m-win_amd64.whl"
 
-    -  # Install test runner;    python -m pip install "pytest<8"
+    -  **Install test runner**;    python -m pip install "pytest<8"
 
-    -  # Start CARLA server;    Start-Process "$carlaRoot\CarlaUE4.exe"
+    -  **Start CARLA server**;    Start-Process "$carlaRoot\CarlaUE4.exe"
    
-    -  # Run SAFAR tests;    python -m pytest safar\tests -q
+    -  **Run SAFAR tests**;    python -m pytest safar\tests -q
 
-    -  # Run live SAFAR scenario;    python -m safar.run_carla_safar
+    -  **Run live SAFAR scenario**;    python -m safar.run_carla_safar
 
-    -  # Run one selected scenario;    python -m safar.run_carla_safar --scenario emergency_stop
+    -  **Run one selected scenario**;    python -m safar.run_carla_safar --scenario emergency_stop
 
 ---
 
