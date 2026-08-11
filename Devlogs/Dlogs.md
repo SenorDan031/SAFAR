@@ -10,7 +10,7 @@
 
 The **SAFAR** project was officially established with the creation of its central GitHub repository, **SAFAR** is an **Assisted Automated Driving System** that is help enhance driver's experience.
 
-**[Krish Agarwal's] (https://github.com/Krishagarwal558)** DLogs
+**[Krish Agarwal's](https://github.com/Krishagarwal558)** DLogs
 
 - Made the prototype folder structure and pushed the files in repo.
 
