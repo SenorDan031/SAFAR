@@ -1,81 +1,27 @@
-from .models import (
-    VehicleState,
-    Hazard,
-    DriverState,
-    Decision,
-    Action,
-    RiskAssessment,
-)
+from .models import ActionType, Decision, RiskLevel
 
 
 class DecisionEngine:
-
-    def decide(
-        self,
-        vehicle: VehicleState,
-        hazard: Hazard,
-        driver: DriverState,
-        risk: RiskAssessment,
-    ) -> Decision:
-
-        current_speed = vehicle.speed_kmh
-
-        if not hazard.in_path:
+    def decide(self, assessment, current_speed_mps):
+        if assessment.level == RiskLevel.CRITICAL:
             return Decision(
-                action=Action.NONE,
-                target_speed_kmh=current_speed,
-                brake=0.0,
-                throttle=0.0,
-                reason="Hazard not in vehicle path."
+                ActionType.EMERGENCY_BRAKE, 0.0, 1.0, 0.0,
+                assessment.reason,
             )
 
-        # Critical collision
-        if risk.critical:
-
+        if assessment.level == RiskLevel.HIGH:
             return Decision(
-                action=Action.EMERGENCY_BRAKE,
-                target_speed_kmh=0.0,
-                brake=1.0,
-                throttle=0.0,
-                reason="Critical collision risk."
+                ActionType.SLOWDOWN, current_speed_mps * 0.5, 0.5, 0.0,
+                assessment.reason,
             )
 
-        # High risk
-        if risk.score >= 0.65:
-
-            target_speed = max(
-                10.0,
-                current_speed * 0.5
-            )
-
+        if assessment.level == RiskLevel.MEDIUM:
             return Decision(
-                action=Action.BRAKE,
-                target_speed_kmh=target_speed,
-                brake=0.45,
-                throttle=0.0,
-                reason="High collision risk."
-            )
-
-        # Moderate risk
-        if risk.score >= 0.4:
-
-            target_speed = max(
-                20.0,
-                current_speed * 0.75
-            )
-
-            return Decision(
-                action=Action.SLOW_DOWN,
-                target_speed_kmh=target_speed,
-                brake=0.2,
-                throttle=0.0,
-                reason="Moderate hazard detected."
+                ActionType.WARN, current_speed_mps * 0.8, 0.1, 0.2,
+                assessment.reason,
             )
 
         return Decision(
-            action=Action.WARN,
-            target_speed_kmh=current_speed,
-            brake=0.0,
-            throttle=0.0,
-            reason="Hazard detected but intervention not required."
+            ActionType.NONE, current_speed_mps, 0.0, 0.45,
+            assessment.reason,
         )
