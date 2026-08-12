@@ -51,6 +51,8 @@ The **SAFAR** project was officially established with the creation of its centra
     -  **Run live SAFAR scenario**;    python -m safar.run_carla_safar
 
     -  **Run one selected scenario**;    python -m safar.run_carla_safar --scenario emergency_stop
+
+      
 **[Yazdaan Ansari](https://github.com/SenorDan031)** Dlog
 
   - Structured Krish Agarwal's dlog, aligning it with Dlog rules.
