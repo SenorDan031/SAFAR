@@ -8,7 +8,7 @@
 - Added detecting system for pedestrians and static objects.
 - Added virtual car control system for simulation (pygames and CARLA)
 
-**[Yazdaan Ansari's](https://github.com/SenorDan031)**Dlogs
+** [Yazdaan Ansari's](https://github.com/SenorDan031) ** Dlogs
 
 - Renamed folder 'safar' to 'Logic_Engine' to avoid name conflicts.
 - Revamped some import modules to make them compatible for  project.
