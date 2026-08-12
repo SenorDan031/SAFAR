@@ -8,7 +8,7 @@
 - Added detecting system for pedestrians and static objects.
 - Added virtual car control system for simulation (pygames and CARLA)
 
-##END OF Dlog
+## END OF Dlog
 ---
 
 
@@ -53,14 +53,14 @@ The **SAFAR** project was officially established with the creation of its centra
     -  **Run one selected scenario**;    python -m safar.run_carla_safar --scenario emergency_stop
 
       
-**[Yazdaan Ansari](https://github.com/SenorDan031)** Dlog
+**[Yazdaan Ansari](https://github.com/SenorDan031)** Dlogs
 
 - Structured Krish Agarwal's dlog, aligning it with Dlog rules.
 - Made few changes regarding team members for this project :
   - Removed Japnoor Kaur.
   - Removed Kashish Kushwaha.
     
-##END OF Dlog
+## END OF Dlog
 ---
 
 ## Our Fellow Team Members
