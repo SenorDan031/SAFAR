@@ -22,3 +22,11 @@ CARLA vehicles
 → RiskAssessment
 → DecisionEngine
 → CARLA throttle and brake control
+```
+
+## Our Fellow Team Members
+
+- [Yazdaan Ansari](https://github.com/SenorDan031)
+- [Krish Agarwal](https://github.com/Krishagarwal558)
+- [Saksham Dixit](https://github.com/sakshamd19)
+
