@@ -6,7 +6,7 @@ from .types import Detection, as_point3d
 
 
 def classify_actor(type_id: str) -> Optional[str]:
-    """Map CARLA actor identifiers to the labels used by SAFAR."""
+    """Map CARLA actor identifiers to the labels used by Logic_Engine."""
     value = (type_id or "").lower()
     if value.startswith("walker.pedestrian"):
         return "pedestrian"

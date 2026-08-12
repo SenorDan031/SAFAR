@@ -1,4 +1,4 @@
-"""Shared data models for SAFAR Phase 2 perception."""
+"""Shared data models for Logic_Engine Phase 2 perception."""
 
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Optional, Tuple

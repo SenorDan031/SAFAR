@@ -1,4 +1,4 @@
-"""Run a CARLA scene that exercises every SAFAR Phase 2 perception label.
+"""Run a CARLA scene that exercises every Logic_Engine Phase 2 perception label.
 
 Start CARLA first, then run from the repository root:
     python -m scenarios.phase2_perception_scene
@@ -9,7 +9,7 @@ from typing import Iterable, List
 
 import carla
 
-from safar.perception import CarlaPerception
+from Logic_Engine.perception import CarlaPerception
 
 
 HOST = "localhost"
@@ -54,12 +54,12 @@ def spawn_scene(world: carla.World) -> List[carla.Actor]:
     for spawn_point in spawn_points:
         spawned: List[carla.Actor] = []
         try:
-            ego = spawn(world, ego_blueprint, spawn_point, "safar_perception_ego")
+            ego = spawn(world, ego_blueprint, spawn_point, "Logic_Engine_perception_ego")
             spawned.append(ego)
-            spawned.append(spawn(world, first_blueprint(blueprints, ("vehicle.audi.tt", "vehicle.*")), offset_transform(spawn_point, 18), "safar_lead_vehicle"))
-            spawned.append(spawn(world, first_blueprint(blueprints, ("walker.pedestrian.*",)), offset_transform(spawn_point, 11, 4), "safar_pedestrian"))
-            spawned.append(spawn(world, first_blueprint(blueprints, ("vehicle.*bike*", "vehicle.*motorcycle*", "vehicle.*")), offset_transform(spawn_point, 14, -3.5), "safar_two_wheeler"))
-            spawned.append(spawn(world, first_blueprint(blueprints, ("static.prop.trafficcone01", "static.prop.*")), offset_transform(spawn_point, 8, 2), "safar_road_hazard"))
+            spawned.append(spawn(world, first_blueprint(blueprints, ("vehicle.audi.tt", "vehicle.*")), offset_transform(spawn_point, 18), "Logic_Engine_lead_vehicle"))
+            spawned.append(spawn(world, first_blueprint(blueprints, ("walker.pedestrian.*",)), offset_transform(spawn_point, 11, 4), "Logic_Engine_pedestrian"))
+            spawned.append(spawn(world, first_blueprint(blueprints, ("vehicle.*bike*", "vehicle.*motorcycle*", "vehicle.*")), offset_transform(spawn_point, 14, -3.5), "Logic_Engine_two_wheeler"))
+            spawned.append(spawn(world, first_blueprint(blueprints, ("static.prop.trafficcone01", "static.prop.*")), offset_transform(spawn_point, 8, 2), "Logic_Engine_road_hazard"))
             return spawned
         except RuntimeError:
             for actor in reversed(spawned):

@@ -1,4 +1,4 @@
-"""CARLA-facing orchestration for SAFAR's Phase 2 perception starters."""
+"""CARLA-facing orchestration for Logic_Engine's Phase 2 perception starters."""
 
 import time
 from typing import Optional
