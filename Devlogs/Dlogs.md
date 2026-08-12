@@ -8,6 +8,12 @@
 - Added detecting system for pedestrians and static objects.
 - Added virtual car control system for simulation (pygames and CARLA)
 
+**[Yazdaan Ansari's](https://github.com/SenorDan031)**Dlogs
+
+- Renamed folder 'safar' to 'Logic_Engine' to avoid name conflicts.
+- Revamped some import modules to make them compatible for  project.
+- Added a new member in the team, [Saksham Dixit](https://github.com/sakshamd19).
+
 ## END OF Dlog
 ---
 
@@ -30,7 +36,7 @@ The **SAFAR** project was officially established with the creation of its centra
 
 - Developed the hazard detection scripts with time to collision logic
 
-- Tested them via scenarios on CARLA **SAFAR\safar\run_carla_safar.py**
+- Tested them via scenarios on CARLA **SAFAR\Logic_Engine\run_carla_safar.py**
 
 - Essential commands to check :
 
@@ -46,14 +52,14 @@ The **SAFAR** project was officially established with the creation of its centra
 
     -  **Start CARLA server**;    Start-Process "$carlaRoot\CarlaUE4.exe"
    
-    -  **Run SAFAR tests**;    python -m pytest safar\tests -q
+    -  **Run SAFAR tests**;    python -m pytest  Logic_Engine\tests -q
 
-    -  **Run live SAFAR scenario**;    python -m safar.run_carla_safar
+    -  **Run live SAFAR scenario**;    python -m Logic_Engine.run_carla_safar
 
-    -  **Run one selected scenario**;    python -m safar.run_carla_safar --scenario emergency_stop
+    -  **Run one selected scenario**;    python -m Logic_Engine.run_carla_safar --scenario emergency_stop
 
       
-**[Yazdaan Ansari](https://github.com/SenorDan031)** Dlogs
+**[Yazdaan Ansari's](https://github.com/SenorDan031)** Dlogs
 
 - Structured Krish Agarwal's dlog, aligning it with Dlog rules.
 - Made few changes regarding team members for this project :
@@ -67,3 +73,4 @@ The **SAFAR** project was officially established with the creation of its centra
 
 - [Yazdaan Ansari](https://github.com/SenorDan031)
 - [Krish Agarwal](https://github.com/Krishagarwal558)
+- [Saksham Dixit](https://github.com/sakshamd19)
