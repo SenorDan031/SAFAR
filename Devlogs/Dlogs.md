@@ -55,11 +55,12 @@ The **SAFAR** project was officially established with the creation of its centra
       
 **[Yazdaan Ansari](https://github.com/SenorDan031)** Dlog
 
-  - Structured Krish Agarwal's dlog, aligning it with Dlog rules.
-  - Made few changes regarding team members for this project :
-              - Removed Japnoor Kaur.
-              - Removed Kashish Kushwaha.
-  ##END OF Dlog
+- Structured Krish Agarwal's dlog, aligning it with Dlog rules.
+- Made few changes regarding team members for this project :
+  - Removed Japnoor Kaur.
+  - Removed Kashish Kushwaha.
+    
+##END OF Dlog
 ---
 
 ## Our Fellow Team Members
