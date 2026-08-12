@@ -1,3 +1,16 @@
+
+## Day 2 - upgraded the detection system and better testing scripts
+
+**Date of Log:** [12/08/2026]  
+**Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558) 
+---
+
+- added detecting system for pegestrians,two wheelrs,and other static objects
+- car control system for test scripts (pygames and CARLA)
+
+---
+END OF D-LOG
+
 # Day 1 - Project Establishment Record
 
 **Date of Log:** [11/08/2026]  
@@ -44,5 +57,3 @@ The **SAFAR** project was officially established with the creation of its centra
 
 - [Yazdaan Ansari](https://github.com/SenorDan031)
 - [Krish Agarwal](https://github.com/Krishagarwal558)
-- [Japnoor Kaur](https://github.com/kaurjapnoor60-max)
-- [Kashish Kushwaha](https://github.com/kash-12)
