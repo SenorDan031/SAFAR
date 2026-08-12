@@ -1,15 +1,16 @@
 
-## Day 2 - upgraded the detection system and better testing scripts
+## Day 2 - Enhanced detection and module scripts
 
 **Date of Log:** [12/08/2026]  
 **Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558) 
 ---
 
-- added detecting system for pegestrians,two wheelrs,and other static objects
-- car control system for test scripts (pygames and CARLA)
+- Added detecting system for pedestrians and static objects.
+- Added virtual car control system for simulation (pygames and CARLA)
 
+##END OF Dlog
 ---
-END OF D-LOG
+
 
 # Day 1 - Project Establishment Record
 
@@ -50,7 +51,13 @@ The **SAFAR** project was officially established with the creation of its centra
     -  **Run live SAFAR scenario**;    python -m safar.run_carla_safar
 
     -  **Run one selected scenario**;    python -m safar.run_carla_safar --scenario emergency_stop
+**[Yazdaan Ansari](https://github.com/SenorDan031)** Dlog
 
+  - Structured Krish Agarwal's dlog, aligning it with Dlog rules.
+  - Made few changes regarding team members for this project :
+              - Removed Japnoor Kaur.
+              - Removed Kashish Kushwaha.
+  ##END OF Dlog
 ---
 
 ## Our Fellow Team Members
