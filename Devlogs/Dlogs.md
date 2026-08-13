@@ -3,9 +3,9 @@
 **Date of Log:** [13/08/2026]  
 **Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558)  
 ---
-- Implemented, Trajectory relevance: predicts whether a vehicle, pedestrian, or two-wheeler will intersect the ego’s future path. = | 
-- Path-aware prioritization: a crossing pedestrian can be selected before entering the current lane corridor.                    =  |====== Real imporatant changes
-- Structured event record: stores bounded in-memory events with hazard type, distance, ego speed, risk, and trajectory conflict.  = |
+- Implemented, **Trajectory relevance**: predicts whether a vehicle, pedestrian, or two-wheeler will intersect the ego’s future path. 
+- **Path-aware prioritization**: a crossing pedestrian can be selected before entering the current lane corridor.                   
+- **Structured event record**: stores bounded in-memory events with hazard type, distance, ego speed, risk, and trajectory conflict.  
 - Added persistent vehicle encounter logging [encounter_log.py] 
 - Fixed issues: Detects close side vehicles even when they are outside the predicted lane corridor, Triggers the existing risk/override flow before a side collision, Ignores vehicles behind the ego, so rear
   traffic does not cause braking.
