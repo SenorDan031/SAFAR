@@ -3,7 +3,7 @@
 **Date of Log:** [13/08/2026]  
 **Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558)  
 ---
-- Implemented, **Trajectory relevance**: predicts whether a vehicle, pedestrian, or two-wheeler will intersect the ego’s future path. 
+- **Trajectory relevance**: predicts whether a vehicle, pedestrian, or two-wheeler will intersect the ego’s future path. 
 - **Path-aware prioritization**: a crossing pedestrian can be selected before entering the current lane corridor.                   
 - **Structured event record**: stores bounded in-memory events with hazard type, distance, ego speed, risk, and trajectory conflict.  
 - Added persistent vehicle encounter logging [encounter_log.py] 
