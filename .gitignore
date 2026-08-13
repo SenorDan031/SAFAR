@@ -1,0 +1,7 @@
+﻿.venv/
+.venv-carla37/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
