@@ -9,7 +9,8 @@
 - Refined Repository structure.
 - Resolved some merge conflicts, restored certain files and pushed a back up folder as well.
 
-##END OF Dlog
+
+## END OF Dlog
 ---
 
 ## Day 3 - Advanced Detection system and Enhanced Logic Engine
@@ -25,7 +26,8 @@
   traffic does not cause braking.
 -The full_validation scene now also spawns 8 distant mixed background entities—vehicles, pedestrians, two-wheelers, and hazards—for more realistic perception context.
 
-##END OF Dlog
+
+## END OF Dlog
 ---
   
 
