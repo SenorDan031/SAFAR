@@ -1,4 +1,18 @@
-## Day 3 - made the detection and execution engine stricter and more advance 
+## Day 4 - Advanced Detection system and Enhanced Logic Engine
+
+**Date of Log:** [14/08/2026]  
+**Log Author:** [Yazdaan Ansari](https://github.com/SenorDan031)  
+---
+
+- Refined [Krish Agarwal](https://github.com/Krishagarwal558) previous day documentations.
+- Added documentation in code files to make the work more descriptive and detailed.
+- Refined Repository structure.
+- Resolved some merge conflicts, restored certain files and pushed a back up folder as well.
+
+**END OF Dlog**
+---
+
+## Day 3 - Advanced Detection system and Enhanced Logic Engine
 
 **Date of Log:** [13/08/2026]  
 **Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558)  
