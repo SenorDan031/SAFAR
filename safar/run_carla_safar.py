@@ -16,9 +16,7 @@ BRAKE_DISTANCE = 8.0
 CRITICAL_TTC = 1.5
 
 
-# ============================================================
-# Utility
-# ============================================================
+#Essential utilities and tools used by Carla for vehicle movement logic
 
 def distance(a, b):
     return math.sqrt(
@@ -73,7 +71,7 @@ def is_in_front(ego, actor, max_distance=60.0):
     if dot <= 0:
         return False, distance_value
 
-    # Rough lane/path check.
+    # Rough lane/path validation.
     right = ego_transform.get_right_vector()
 
     lateral = abs(
@@ -88,9 +86,7 @@ def is_in_front(ego, actor, max_distance=60.0):
     return True, distance_value
 
 
-# ============================================================
-# CARLA connection
-# ============================================================
+# Connects our backend with the CARLA for system simulation
 
 def connect():
     client = carla.Client(HOST, PORT)
@@ -104,9 +100,7 @@ def connect():
     return client, world
 
 
-# ============================================================
-# Vehicle spawning
-# ============================================================
+#The below logic will be responsible for spawing entities while simulatiom
 
 def spawn_ego(world):
     blueprint_library = world.get_blueprint_library()
@@ -236,9 +230,7 @@ def spawn_pedestrian(world, ego):
     return walker
 
 
-# ============================================================
-# Scenario setup
-# ============================================================
+#This code block is used for seting up the simulation space/scenario.
 
 def setup_scenario(world, ego, scenario):
     actors = []
@@ -288,9 +280,7 @@ def setup_scenario(world, ego, scenario):
     return actors
 
 
-# ============================================================
-# SAFAR safety layer
-# ============================================================
+#This allows our system to evaluate risk and make decision based on on-road events
 
 def evaluate_hazards(ego, actors):
     ego_speed = max(forward_speed(ego), 0.0)
@@ -386,16 +376,12 @@ def evaluate_hazards(ego, actors):
     }
 
 
-# ============================================================
-# Manual control + SAFAR override
-# ============================================================
+#Allows to manually manuevar the car
 
 def control_vehicle(ego, keys, safety):
     control = ego.get_control()
 
-    # --------------------------------------------------------
-    # SAFAR emergency override
-    # --------------------------------------------------------
+#Applies emergency brakes based on assesed risk
 
     if safety["brake"]:
         control.throttle = 0.0
@@ -406,9 +392,8 @@ def control_vehicle(ego, keys, safety):
 
         return "SAFAR EMERGENCY BRAKE"
 
-    # --------------------------------------------------------
-    # Human control
-    # --------------------------------------------------------
+    #Manual  control
+
 
     control.throttle = 0.0
     control.brake = 0.0
@@ -434,9 +419,7 @@ def control_vehicle(ego, keys, safety):
     return "MANUAL CONTROL"
 
 
-# ============================================================
-# HUD
-# ============================================================
+
 
 def draw_text(screen, font, text, x, y):
     surface = font.render(
@@ -534,9 +517,7 @@ def update_hud(screen, font, safety, mode, ego):
     pygame.display.flip()
 
 
-# ============================================================
 # Main
-# ============================================================
 
 def main():
     parser = argparse.ArgumentParser()
