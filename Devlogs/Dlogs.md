@@ -9,7 +9,7 @@
 - Refined Repository structure.
 - Resolved some merge conflicts, restored certain files and pushed a back up folder as well.
 
-**END OF Dlog**
+##END OF Dlog
 ---
 
 ## Day 3 - Advanced Detection system and Enhanced Logic Engine
@@ -24,6 +24,9 @@
 - Fixed issues: Detects close side vehicles even when they are outside the predicted lane corridor, Triggers the existing risk/override flow before a side collision, Ignores vehicles behind the ego, so rear
   traffic does not cause braking.
 -The full_validation scene now also spawns 8 distant mixed background entities—vehicles, pedestrians, two-wheelers, and hazards—for more realistic perception context.
+
+##END OF Dlog
+---
   
 
 ## Day 2 - Enhanced detection and module scripts
