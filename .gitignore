@@ -1,7 +1,26 @@
-﻿.venv/
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
 .venv-carla37/
 venv/
-__pycache__/
-*.pyc
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python tooling
 .pytest_cache/
-.env
+.mypy_cache/
+.ruff_cache/
