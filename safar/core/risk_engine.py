@@ -33,5 +33,5 @@ class RiskEngine:
             )
 
         return RiskAssessment(
-            RiskLevel.SAFE, 0.0, "Following distance is acceptable."     
-        )& "C:\Users\shrey\SAFAR\SAFAR\.venv-carla37\Scripts\python.exe" -m pytest safar\tests -q
+            RiskLevel.SAFE, 0.0, "Following distance is acceptable."
+        )

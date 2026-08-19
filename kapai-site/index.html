@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAFAR — Modular Road-Safety Intelligence for Existing Fleets & Vehicles</title>
+  <meta name="description" content="SAFAR is an open-architecture, retrofittable road safety intelligence framework providing spatial perception, deterministic hazard reasoning, and driver assistance for vehicles without factory ADAS." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-dark">
+
+  <!-- Header / Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      <a href="#hero" class="brand-link">
+        <div class="brand-symbol">
+          <img src="assets/safar-logo.png" alt="SAFAR Symbol" class="brand-img" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">SAFAR</span>
+          <span class="brand-tag">SAFETY INTELLIGENCE</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#story" class="nav-link">Genesis</a>
+        <a href="#problem" class="nav-link">The Core Problem</a>
+        <a href="#framework" class="nav-link">Architecture</a>
+        <a href="#interactive-demo" class="nav-link">Simulator</a>
+        <a href="#achievements" class="nav-link">Validation</a>
+        <a href="#learnings" class="nav-link">Learnings</a>
+        <a href="#roadmap" class="nav-link">Roadmap</a>
+        <a href="#team" class="nav-link">Team</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://github.com/SenorDan031/SAFAR" target="_blank" rel="noreferrer" class="btn btn-outline btn-sm nav-gh-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>GitHub</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="hero-canvas-bg">
+        <div class="grid-perspective"></div>
+        <div class="glow-radial"></div>
+        <div class="ray-lines"></div>
+      </div>
+
+      <div class="container hero-container">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-chip">Open-Architecture ADAS Research</span>
+          <span class="eyebrow-sep">/</span>
+          <span class="eyebrow-state">Software v1.0 Validated</span>
+        </div>
+
+        <div class="hero-branding">
+          <img src="assets/safar-logo.png" alt="SAFAR Emblem" class="hero-shield-logo" />
+        </div>
+
+        <h1 class="hero-headline">SAFAR</h1>
+        <p class="hero-subheadline">Affordable road-safety intelligence for existing vehicles.</p>
+        
+        <p class="hero-lead">
+          A modular, sensor-agnostic framework that isolates visual object perception from deterministic spatial relevance, temporal hazard confirmation, and risk-calibrated driver intervention.
+        </p>
+
+        <!-- Pipeline Sequence Bar -->
+        <div class="pipeline-tracker">
+          <div class="tracker-item">
+            <span class="tracker-code">01</span>
+            <span class="tracker-name">DETECT</span>
+            <span class="tracker-desc">YOLO Vision</span>
+          </div>
+          <div class="tracker-sep">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <div class="tracker-item">
+            <span class="tracker-code">02</span>
+            <span class="tracker-name">UNDERSTAND</span>
+            <span class="tracker-desc">Ego Corridor</span>
+          </div>
+          <div class="tracker-sep">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <div class="tracker-item">
+            <span class="tracker-code">03</span>
+            <span class="tracker-name">ASSESS</span>
+            <span class="tracker-desc">Risk Engine</span>
+          </div>
+          <div class="tracker-sep">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <div class="tracker-item">
+            <span class="tracker-code">04</span>
+            <span class="tracker-name">ACT</span>
+            <span class="tracker-desc">Safe Intervention</span>
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <a href="#framework" class="btn btn-primary btn-lg">
+            <span>Explore Technical Stack</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+          </a>
+          <a href="#interactive-demo" class="btn btn-secondary btn-lg">
+            <span>Live Interactive HUD</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. The Story Behind SAFAR -->
+    <section class="section" id="story">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">GENESIS & PHILOSOPHY</span>
+          <h2 class="title-primary">Why we started SAFAR</h2>
+          <p class="lead-paragraph">
+            Modern high-end vehicles increasingly package advanced driver-assistance systems. But bringing comparable safety intelligence to hundreds of millions of on-road vehicles has historically required prohibitive hardware budgets or whole-vehicle replacement.
+          </p>
+        </div>
+
+        <div class="story-layout">
+          <div class="story-article">
+            <div class="pull-quote">
+              <span class="quote-mark">“</span>
+              <p>Can meaningful road-hazard awareness be built as an affordable, modular framework for vehicles that don't have factory ADAS?</p>
+            </div>
+            
+            <p>
+              What started as an ideathon concept quickly evolved into a deeper systems engineering challenge: <strong>detecting an obstacle is only the beginning</strong>. A real-world vehicle safety system must understand whether an object is in the projected ego corridor, whether it is closing in, whether the hazard persists across multiple camera frames, and whether driver intervention is strictly justified.
+            </p>
+            <p>
+              Rather than building a brittle end-to-end black box, SAFAR establishes a decoupled architecture where perception, tracking, ego-corridor geometry, multi-frame confirmation, and risk evaluation operate as distinct, testable engineering layers.
+            </p>
+          </div>
+
+          <div class="evolution-stepper">
+            <div class="stepper-header">
+              <span class="stepper-badge">Evolution Pathway</span>
+              <span class="stepper-meta">Concept to Simulation Adapter</span>
+            </div>
+
+            <ol class="step-tree">
+              <li class="tree-node">
+                <div class="node-marker"></div>
+                <div class="node-body">
+                  <strong>Initial Concept</strong>
+                  <p>Inquire whether consumer cameras could provide affordable collision warning.</p>
+                </div>
+              </li>
+              <li class="tree-node">
+                <div class="node-marker"></div>
+                <div class="node-body">
+                  <strong>YOLO 2D Detection</strong>
+                  <p>Implement real-time visual classification of cars, trucks, two-wheelers, and pedestrians.</p>
+                </div>
+              </li>
+              <li class="tree-node node-warning">
+                <div class="node-marker marker-alert"></div>
+                <div class="node-body">
+                  <strong>"Detected ≠ Dangerous" Realization</strong>
+                  <p>Discovered that raw detections trigger non-stop false alarms on parked roadside vehicles.</p>
+                </div>
+              </li>
+              <li class="tree-node">
+                <div class="node-marker"></div>
+                <div class="node-body">
+                  <strong>Spatial-Temporal Tracking</strong>
+                  <p>Added IoU object tracking and history buffers to maintain persistent identities across frames.</p>
+                </div>
+              </li>
+              <li class="tree-node">
+                <div class="node-marker"></div>
+                <div class="node-body">
+                  <strong>Ego-Corridor & Motion Model</strong>
+                  <p>Engineered resolution-independent trapezoidal corridor filtering and qualitative approach analysis.</p>
+                </div>
+              </li>
+              <li class="tree-node">
+                <div class="node-marker"></div>
+                <div class="node-body">
+                  <strong>Multi-Frame Temporal Confirmation</strong>
+                  <p>Designed a 5-state hysteresis machine (Candidate → Confirmed → Hazard) to eliminate single-frame noise.</p>
+                </div>
+              </li>
+              <li class="tree-node node-active">
+                <div class="node-marker marker-active"></div>
+                <div class="node-body">
+                  <strong>Closed-Loop Game Adapter</strong>
+                  <p>Completed <em>The Crew 2</em> simulation adapter with reversible DirectInput hardware scancode control.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. The Problem -->
+    <section class="section bg-slate" id="problem">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">SYSTEM DESIGN INSIGHT</span>
+          <h2 class="title-primary">The problem isn't detecting a car.</h2>
+          <p class="lead-paragraph mx-auto">
+            Standard computer vision treats every detected bounding box as an isolated entity. A reliable ADAS framework must extract actionable context from the visual scene.
+          </p>
+        </div>
+
+        <!-- Comparative Interactive Visualization -->
+        <div class="comparator-card">
+          <div class="comp-pane pane-naive">
+            <div class="pane-header">
+              <span class="pane-tag tag-gray">Standard Object Detector</span>
+              <h3>What YOLO Sees</h3>
+            </div>
+            <div class="comp-canvas canvas-naive">
+              <div class="sim-bbox box-left">
+                <span class="box-lbl">Car 0.88</span>
+              </div>
+              <div class="sim-bbox box-lead">
+                <span class="box-lbl">Car 0.94</span>
+              </div>
+              <div class="sim-bbox box-side">
+                <span class="box-lbl">Truck 0.81</span>
+              </div>
+              <div class="sim-bbox box-far">
+                <span class="box-lbl">Car 0.76</span>
+              </div>
+            </div>
+            <div class="pane-footer">
+              <p>Indiscriminately flags all 4 objects. Cannot distinguish between a parked vehicle on the left and a braking truck in the driving lane.</p>
+            </div>
+          </div>
+
+          <div class="comp-divider">
+            <span class="divider-pill">VS</span>
+          </div>
+
+          <div class="comp-pane pane-safar">
+            <div class="pane-header">
+              <span class="pane-tag tag-green">SAFAR Context Engine</span>
+              <h3>What SAFAR Solves</h3>
+            </div>
+            <div class="questions-deck">
+              <div class="deck-item">
+                <div class="deck-bullet">01</div>
+                <div class="deck-text">
+                  <strong>Which object is in our path?</strong>
+                  <span>Evaluates bottom center intersection within the parameterized trapezoidal ego corridor.</span>
+                </div>
+              </div>
+              <div class="deck-item">
+                <div class="deck-bullet">02</div>
+                <div class="deck-text">
+                  <strong>Which one is closing in?</strong>
+                  <span>Evaluates image-space bounding box expansion rate without guessing metric km/h.</span>
+                </div>
+              </div>
+              <div class="deck-item">
+                <div class="deck-bullet">03</div>
+                <div class="deck-text">
+                  <strong>Which hazard persists over time?</strong>
+                  <span>Requires multi-frame confirmation to prevent spurious single-frame false activations.</span>
+                </div>
+              </div>
+              <div class="deck-item">
+                <div class="deck-bullet">04</div>
+                <div class="deck-text">
+                  <strong>What response is justified?</strong>
+                  <span>Maps confirmed threat severity to CONTINUE, CAUTION, WARN, SLOWDOWN, or EMERGENCY_BRAKE.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Industry Challenges Grid -->
+        <div class="grid grid-4 mt-6">
+          <div class="info-card">
+            <div class="info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+            </div>
+            <h4>Existing Vehicle Base</h4>
+            <p>Over 1.4 billion vehicles globally lack built-in ADAS. Replacing usable fleets is economically and ecologically unviable.</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8"/></svg>
+            </div>
+            <h4>Hardware Cost Barriers</h4>
+            <p>Automotive-grade LiDAR and heavy compute clusters are out of reach for consumer retrofits and commercial taxi fleets.</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h4>Alert Fatigue & Trust</h4>
+            <p>False positive alerts destroy driver trust. A safety system that beeps needlessly will simply be switched off.</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h4>Complex Road Realities</h4>
+            <p>Mixed multi-modal traffic, unmarked road shoulders, potholes, glare, and erratic lane changes demand resilient reasoning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. What SAFAR Actually Is -->
+    <section class="section" id="framework">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">SYSTEM ARCHITECTURE</span>
+          <h2 class="title-primary">A modular framework, not just a detector.</h2>
+          <p class="lead-paragraph">
+            SAFAR decouples perception from safety reasoning. Different sensor backends (phone cameras, webcams, simulated render targets, future stereo rigs) feed into a unified, deterministic risk and decision engine.
+          </p>
+        </div>
+
+        <!-- Flow Diagram -->
+        <div class="architecture-board">
+          <div class="arch-flow">
+            <div class="arch-node">
+              <span class="node-id">01</span>
+              <span class="node-name">SENSOR INPUT</span>
+              <span class="node-sub">Win32 Screen / Video / Camera</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node">
+              <span class="node-id">02</span>
+              <span class="node-name">PERCEPTION</span>
+              <span class="node-sub">YOLO Detector + Adapter</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node">
+              <span class="node-id">03</span>
+              <span class="node-name">TRACKING</span>
+              <span class="node-sub">IoU Tracker + History</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node">
+              <span class="node-id">04</span>
+              <span class="node-name">EGO CORRIDOR</span>
+              <span class="node-sub">Trapezoid Path Relevance</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node">
+              <span class="node-id">05</span>
+              <span class="node-name">HAZARD ENGINE</span>
+              <span class="node-sub">Lead Selector + Confirmation</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node">
+              <span class="node-id">06</span>
+              <span class="node-name">RISK ENGINE</span>
+              <span class="node-sub">Deterministic Threat Mapping</span>
+            </div>
+            <div class="arch-edge">→</div>
+            <div class="arch-node node-highlight">
+              <span class="node-id">07</span>
+              <span class="node-name">DECISION & ACT</span>
+              <span class="node-sub">HUD Advisory / Game Controller</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Modules Grid -->
+        <div class="grid grid-3 mt-6">
+          <div class="module-spec-card">
+            <div class="card-tag">MODULE 01</div>
+            <h4>Spatial & Ego Corridor</h4>
+            <p>Maps dynamic vehicle corridors in normalized coordinates ($x \in [0, 1], y \in [0, 1]$) with parameterized horizon height, top width, and bottom lane width.</p>
+            <div class="code-snippet"><code>EgoPathModel(horizon_y=0.46, bottom_width=0.70)</code></div>
+          </div>
+
+          <div class="module-spec-card">
+            <div class="card-tag">MODULE 02</div>
+            <h4>Temporal Confirmation</h4>
+            <p>Prevents jitter through multi-frame state tracking. Single frames remain in <code>CANDIDATE</code>, holding state through transient occlusions via hysteresis.</p>
+            <div class="code-snippet"><code>Candidate → Confirmed → Hazard → Cleared</code></div>
+          </div>
+
+          <div class="module-spec-card">
+            <div class="card-tag">MODULE 03</div>
+            <h4>Reversible Game Controller</h4>
+            <p>Isolated from the risk engine. Injects DirectInput hardware scancodes with foreground window focus guards and automatic 3.0s override timeouts.</p>
+            <div class="code-snippet"><code>SendInput(SCANCODE_W_UP, SCANCODE_S_DOWN)</code></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Simulator / Telemetry Section (FIXED NON-OVERLAPPING 3-COLUMN CONSOLE) -->
+    <section class="section bg-slate" id="interactive-demo">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">INTERACTIVE BENCHMARK</span>
+          <h2 class="title-primary">Live HUD & Telemetry Simulator</h2>
+          <p class="lead-paragraph mx-auto">
+            Test how SAFAR evaluates different road situations in real time. Switch scenarios on the left to observe how camera tracking, path relevance, confirmation state, and controller actions respond.
+          </p>
+        </div>
+
+        <div class="sim-dashboard-grid">
+          <!-- 1. Left Column: Scenario Selectors -->
+          <div class="sim-panel sim-scenarios-panel">
+            <div class="panel-kicker">SELECT SCENARIO</div>
+            <div class="hud-scenario-picker">
+              <button class="scenario-btn active" data-scenario="clear">
+                <span class="sc-title">Scenario 1: Clear Road</span>
+                <span class="sc-status">Safe / No Obstacles</span>
+              </button>
+              <button class="scenario-btn" data-scenario="side">
+                <span class="sc-title">Scenario 2: Adjacent Lane</span>
+                <span class="sc-status">Traffic Outside Corridor</span>
+              </button>
+              <button class="scenario-btn" data-scenario="lead">
+                <span class="sc-title">Scenario 3: Confirmed Lead</span>
+                <span class="sc-status">Vehicle Ahead in Path</span>
+              </button>
+              <button class="scenario-btn" data-scenario="approaching">
+                <span class="sc-title">Scenario 4: Rapid Approach</span>
+                <span class="sc-status">High Risk / Slowdown</span>
+              </button>
+              <button class="scenario-btn" data-scenario="cutin">
+                <span class="sc-title">Scenario 5: Sudden Cut-In</span>
+                <span class="sc-status">Candidate → Emergency</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Center Column: Clean Visual Viewport (No Floating Text Overlap) -->
+          <div class="sim-panel sim-viewport-panel">
+            <div class="panel-kicker-bar">
+              <span>VISUAL SENSOR FEED</span>
+              <span class="feed-live-indicator"><span class="pulse-dot-sm"></span> LIVE HUD OVERLAY</span>
+            </div>
+            <div class="viewport-screen" id="viewportScreen">
+              <!-- Ego Corridor Polygon -->
+              <div class="viewport-corridor"></div>
+              
+              <!-- Dynamic Target Box -->
+              <div class="viewport-box" id="viewportBox">
+                <span class="box-badge" id="boxBadge">#image-2 car [LEAD HAZARD]</span>
+              </div>
+              <div class="viewport-side-box" id="viewportSideBox">
+                <span class="box-badge-dim">#image-1 truck [ADJACENT]</span>
+              </div>
+
+              <!-- Stream Footer Badge -->
+              <div class="viewport-meta-footer">
+                <span>Capture: <strong id="liveFps">30.2</strong> FPS</span>
+                <span>Latency: <strong id="liveLat">37.8</strong> ms</span>
+                <span class="mode-tag" id="liveMode">ADAPTER RUNNING</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Right Column: Dedicated Real-Time Diagnostics & Telemetry -->
+          <div class="sim-panel sim-telemetry-panel">
+            <div class="panel-kicker">TELEMETRY & DECISION DIAGNOSTICS</div>
+            <div class="telemetry-data-card">
+              <div class="telemetry-row">
+                <span class="t-key">TARGET ID:</span>
+                <span class="t-val" id="tLead">#image-2 car</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="t-key">CONFIRMATION:</span>
+                <span class="t-val text-green" id="tConf">CONFIRMED</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="t-key">CORRIDOR RELEVANCE:</span>
+                <span class="t-val" id="tPath">HIGH</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="t-key">APPARENT MOTION:</span>
+                <span class="t-val" id="tMotion">APPROACHING</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="t-key">DISTANCE / TTC:</span>
+                <span class="t-val text-dim">UNKNOWN (Single Camera)</span>
+              </div>
+
+              <div class="telemetry-divider-line"></div>
+
+              <div class="telemetry-row highlight-row">
+                <span class="t-key">RISK / DECISION:</span>
+                <span class="t-val text-yellow" id="tDecision">HIGH → SLOWDOWN</span>
+              </div>
+              <div class="telemetry-row highlight-row">
+                <span class="t-key">SIM CONTROLLER:</span>
+                <span class="t-val text-yellow" id="tControl">SLOWDOWN_OVERRIDE (Light Brake)</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="t-key">FAIL-SAFE HOTKEY:</span>
+                <span class="t-val text-muted">F8 (Press to Unlock)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. What We've Achieved -->
+    <section class="section" id="achievements">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">SYSTEM VERIFICATION</span>
+          <h2 class="title-primary">What we've achieved so far</h2>
+          <p class="lead-paragraph">
+            A concrete transition from conceptual vision to a tested simulation adapter with full deterministic test coverage.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="achievement-card">
+            <div class="card-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Computer Vision Core</h3>
+            <ul class="clean-list">
+              <li>Ultralytics YOLO inference (~30 FPS on standard GPU/CPU)</li>
+              <li>Multi-object IoU tracking with historical trajectory</li>
+              <li>Ego-corridor lateral containment evaluation</li>
+              <li>Image-space qualitative expansion & motion analysis</li>
+            </ul>
+          </div>
+
+          <div class="achievement-card">
+            <div class="card-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Deterministic Safety Logic</h3>
+            <ul class="clean-list">
+              <li>Lead-hazard ranking via composite image proximity</li>
+              <li>5-state temporal confirmation state machine</li>
+              <li>Hierarchical threat levels (Safe → Caution → Warn → Slowdown → Emergency)</li>
+              <li>Hysteresis state preservation over transient frame drops</li>
+            </ul>
+          </div>
+
+          <div class="achievement-card">
+            <div class="card-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4m8-2h.01m3.99 0h.01"/></svg>
+            </div>
+            <h3>Simulation & Intervention</h3>
+            <ul class="clean-list">
+              <li>Asynchronous The Crew 2 screen capture with zero backlog</li>
+              <li>DirectInput hardware scancode throttle & brake control</li>
+              <li>Foreground window watchdog + 3.0s override timeout</li>
+              <li>Instant manual safety release hotkey (F8)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Verified Test Banner -->
+        <div class="verification-stats-box mt-6">
+          <div class="stats-row">
+            <div class="stat-unit">
+              <div class="stat-digit text-green">67</div>
+              <div class="stat-desc">Unit & Scenario Tests Passed</div>
+            </div>
+            <div class="stat-unit">
+              <div class="stat-digit text-yellow">2</div>
+              <div class="stat-desc">Skipped (Optional CARLA Backend)</div>
+            </div>
+            <div class="stat-unit">
+              <div class="stat-digit text-green">0</div>
+              <div class="stat-desc">Failures / Regressions</div>
+            </div>
+          </div>
+          <div class="test-notice">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><strong>Scientific Rigor Statement:</strong> Automated unit and scenario tests validate software logic, state machines, and fail-safes. They serve as rigorous software validation, not proof of real-world physical vehicle safety.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Problems We Faced While Building SAFAR -->
+    <section class="section bg-slate" id="learnings">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">ENGINEERING HONESTY</span>
+          <h2 class="title-primary">What broke — and what we learned</h2>
+          <p class="lead-paragraph">
+            Reliable engineering is forged through edge cases and failure modes. We openly document what failed in early iterations and how the architecture was redesigned.
+          </p>
+        </div>
+
+        <div class="learnings-grid">
+          <div class="insight-row">
+            <div class="insight-problem">
+              <span class="insight-badge badge-red">Observed Failure 01</span>
+              <h4>Detection ≠ Hazard Relevance</h4>
+              <p>Raw YOLO detections triggered alerts on cars parked on sidewalks or moving safely in opposing lanes, overwhelming the driver with noise.</p>
+            </div>
+            <div class="insight-arrow">→</div>
+            <div class="insight-solution">
+              <span class="insight-badge badge-green">Architecture Redesign</span>
+              <h4>Ego-Corridor Trapezoid Filtering</h4>
+              <p>Introduced resolution-independent trapezoidal corridor calculations that only elevate objects intersecting the vehicle's projected heading corridor.</p>
+            </div>
+          </div>
+
+          <div class="insight-row">
+            <div class="insight-problem">
+              <span class="insight-badge badge-red">Observed Failure 02</span>
+              <h4>Single-Frame Noise Created False Alarms</h4>
+              <p>A single flickered bounding box in bad lighting caused sudden state jumps, triggering abrupt deceleration warnings.</p>
+            </div>
+            <div class="insight-arrow">→</div>
+            <div class="insight-solution">
+              <span class="insight-badge badge-green">Architecture Redesign</span>
+              <h4>5-State Temporal Confirmation Machine</h4>
+              <p>Implemented Candidate → Confirmed → Hazard progression. Single-frame detections are classified as Candidate and cannot trigger braking interventions.</p>
+            </div>
+          </div>
+
+          <div class="insight-row">
+            <div class="insight-problem">
+              <span class="insight-badge badge-red">Observed Failure 03</span>
+              <h4>Monocular Distance Estimation is Dangerous</h4>
+              <p>Estimating physical metric distance and Time-To-Collision (TTC) from a single 2D camera without depth sensors produces untrustworthy results.</p>
+            </div>
+            <div class="insight-arrow">→</div>
+            <div class="insight-solution">
+              <span class="insight-badge badge-green">Architecture Redesign</span>
+              <h4>Explicit "UNKNOWN" Metric Policy</h4>
+              <p>SAFAR explicitly marks <code>Distance = UNKNOWN</code> and <code>TTC = UNKNOWN</code> in camera mode, making decisions purely on validated 2D expansion rates.</p>
+            </div>
+          </div>
+
+          <div class="insight-row">
+            <div class="insight-problem">
+              <span class="insight-badge badge-red">Observed Failure 04</span>
+              <h4>Water-Filled Potholes Defeat 2D Vision</h4>
+              <p>Muddy water in road potholes reflects the sky, appearing identical to flat road puddles to standard RGB convolutional models.</p>
+            </div>
+            <div class="insight-arrow">→</div>
+            <div class="insight-solution">
+              <span class="insight-badge badge-green">Next Research Direction</span>
+              <h4>Stereo Disparity & Surface Normal Geometry</h4>
+              <p>Road depression hazard identification requires multi-view stereo disparity geometry rather than raw 2D bounding box classifiers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Current Limitations -->
+    <section class="section" id="limitations">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">OBJECTIVE BOUNDARIES</span>
+          <h2 class="title-primary">Where SAFAR is today</h2>
+          <p class="lead-paragraph mx-auto">
+            We believe in honest, uncompromising transparency about our current technology readiness level.
+          </p>
+        </div>
+
+        <div class="limitations-matrix">
+          <div class="matrix-card verified-card">
+            <div class="matrix-header">
+              <span class="matrix-icon text-green">✓</span>
+              <h3>Validated Capabilities</h3>
+            </div>
+            <ul class="matrix-list">
+              <li>Real-time image perception with YOLO11 backend</li>
+              <li>Multi-object tracking with persistent identity buffers</li>
+              <li>Ego-corridor spatial containment filtering</li>
+              <li>Deterministic risk, hysteresis, and decision logic</li>
+              <li>Non-intrusive, reversible game simulation adapter</li>
+              <li>67 automated unit and scenario tests passing</li>
+            </ul>
+          </div>
+
+          <div class="matrix-card research-card">
+            <div class="matrix-header">
+              <span class="matrix-icon text-yellow">⚠</span>
+              <h3>Active Research Limitations</h3>
+            </div>
+            <ul class="matrix-list">
+              <li>Metric depth and physical TTC not yet validated</li>
+              <li>Single-camera vision lacks true 3D spatial depth</li>
+              <li>Pothole depth measurement requires stereo sensor testing</li>
+              <li>Real-world adverse weather (heavy fog, monsoon rain) unvalidated</li>
+              <li>No physical automotive throttle/brake actuator control</li>
+              <li>Not certified for production-grade road deployment</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="disclaimer-callout mt-6">
+          <div class="disclaimer-icon">🛡️</div>
+          <div class="disclaimer-text">
+            <strong>Research Prototype Notice:</strong> SAFAR is currently an experimental research and validation prototype, not an autonomous driving system. It is designed to assist driver awareness, not replace human responsibility or attention.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. The Road Ahead -->
+    <section class="section bg-slate" id="roadmap">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">PHASED ROADMAP</span>
+          <h2 class="title-primary">How we are removing those limitations</h2>
+          <p class="lead-paragraph">
+            Our disciplined, stepwise engineering trajectory from software simulation to physical fleet validation.
+          </p>
+        </div>
+
+        <div class="timeline-stepper">
+          <div class="timeline-card active-phase">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 01</span>
+              <span class="phase-state text-green">CURRENT · COMPLETED</span>
+            </div>
+            <h4>Software Core & Simulation</h4>
+            <p>YOLO perception, ego-path modeling, multi-frame temporal confirmation, risk decision logic, and closed-loop The Crew 2 game testing.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="timeline-card in-dev-phase">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 02</span>
+              <span class="phase-state text-cyan">IN ACTIVE R&D</span>
+            </div>
+            <h4>Geometric Stereo Perception</h4>
+            <p>Integrate calibrated stereo camera pairs to measure genuine metric depth, closing velocities, and true Time-To-Collision without LiDAR.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 45%;"></div></div>
+          </div>
+
+          <div class="timeline-card">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 03</span>
+              <span class="phase-state">PLANNED</span>
+            </div>
+            <h4>Road-Surface Intelligence</h4>
+            <p>Deploy disparity-based surface geometry analysis for pothole depth measurement, speed breakers, and water-filled depression detection.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 10%;"></div></div>
+          </div>
+
+          <div class="timeline-card">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 04</span>
+              <span class="phase-state">PLANNED</span>
+            </div>
+            <h4>Low-Cost Multi-Sensor Fusion</h4>
+            <p>Fuse vision streams with vehicle IMU sensors, OBD-II speed telemetry, and low-cost ultrasonic/time-of-flight ranging arrays.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 5%;"></div></div>
+          </div>
+
+          <div class="timeline-card">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 05</span>
+              <span class="phase-state">FUTURE</span>
+            </div>
+            <h4>Controlled Vehicle Pilot</h4>
+            <p>Deploy non-intrusive dashboard HUD and audio advisory units on a closed-track test vehicle under controlled test scenarios.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 0%;"></div></div>
+          </div>
+
+          <div class="timeline-card">
+            <div class="phase-meta">
+              <span class="phase-num">PHASE 06</span>
+              <span class="phase-state">FUTURE</span>
+            </div>
+            <h4>Commercial Fleet Validation</h4>
+            <p>Run real-world telemetry pilot with regional cab and delivery fleets to evaluate safety metrics, driver fatigue, and passenger trust.</p>
+            <div class="phase-progress"><div class="progress-fill" style="width: 0%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Why SAFAR Needs to Exist -->
+    <section class="section" id="thesis">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">VALUE PROPOSITION</span>
+          <h2 class="title-primary">Why retrofit instead of replace?</h2>
+        </div>
+
+        <div class="thesis-comparison-box">
+          <div class="thesis-col thesis-old">
+            <span class="thesis-tag">NEW CAR WITH FACTORY ADAS</span>
+            <div class="thesis-cost text-red">$$$$$$$$$$$$</div>
+            <p>Forces vehicle replacement. Highly capital intensive and completely inaccessible to everyday fleet operators and existing car owners.</p>
+          </div>
+
+          <div class="thesis-vs">VS</div>
+
+          <div class="thesis-col thesis-new">
+            <span class="thesis-tag tag-green">EXISTING VEHICLE + SAFAR</span>
+            <div class="thesis-cost text-green">Fraction of Cost</div>
+            <p>Adds modern safety intelligence to vehicles already on the road via modular, affordable retrofit hardware and software.</p>
+          </div>
+        </div>
+
+        <div class="thesis-quote-card mt-6">
+          <p>“SAFAR is designed around the idea that safety intelligence should not require replacing an otherwise usable vehicle.”</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Early Market Entry Plan -->
+    <section class="section bg-slate" id="market">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="kicker">GO-TO-MARKET</span>
+          <h2 class="title-primary">Start with fleets, not everyone.</h2>
+          <p class="lead-paragraph">
+            A disciplined, data-first adoption strategy targeting high-utilization commercial operators where safety directly impacts operational margins.
+          </p>
+        </div>
+
+        <div class="market-pipeline-box">
+          <div class="market-steps">
+            <div class="m-step"><span>01</span> SAFAR Core</div>
+            <div class="m-arr">→</div>
+            <div class="m-step"><span>02</span> Cab Fleets</div>
+            <div class="m-arr">→</div>
+            <div class="m-step"><span>03</span> Small Pilots</div>
+            <div class="m-arr">→</div>
+            <div class="m-step"><span>04</span> Safety Telemetry</div>
+            <div class="m-arr">→</div>
+            <div class="m-step"><span>05</span> Fleet Validation</div>
+            <div class="m-arr">→</div>
+            <div class="m-step m-highlight"><span>06</span> SAFAR-Certified Cabs</div>
+            <div class="m-arr">→</div>
+            <div class="m-step"><span>07</span> Expansion</div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 mt-6">
+          <div class="info-card">
+            <h4>Why Cab Fleets First?</h4>
+            <ul class="bullet-checklist">
+              <li><strong>Driver Fatigue & Safety:</strong> Proactive awareness support during long, strenuous driving shifts.</li>
+              <li><strong>Vehicle Uptime:</strong> Preventing collision damage keeps productive vehicles generating revenue.</li>
+              <li><strong>Incident Telemetry:</strong> Objective driving risk logs and incident replay for fleet managers.</li>
+              <li><strong>Passenger Trust:</strong> A visible, validated commitment to passenger safety.</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h4>The Fleet Validation Proposition</h4>
+            <p>
+              A SAFAR-equipped commercial vehicle can eventually carry a recognizable safety identity backed by empirical road telemetry.
+            </p>
+            <div class="callout-note mt-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span><strong>Pilot Hypothesis:</strong> We plan to test whether visible, telemetry-backed safety technology influences rider preference and provides measurable fleet differentiation.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Business Model -->
+    <section class="section" id="business">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">COMMERCIAL STRUCTURE</span>
+          <h2 class="title-primary">Simple Per-Vehicle Retrofit Economics</h2>
+        </div>
+
+        <div class="business-equation-card">
+          <div class="eq-block">
+            <span class="eq-label">HARDWARE</span>
+            <strong>SAFAR Sensor Unit</strong>
+            <small>Low-cost camera & compute</small>
+          </div>
+          <span class="eq-operator">+</span>
+          <div class="eq-block">
+            <span class="eq-label">SOFTWARE</span>
+            <strong>On-Device Intelligence</strong>
+            <small>Perception & risk engine</small>
+          </div>
+          <span class="eq-operator">+</span>
+          <div class="eq-block">
+            <span class="eq-label">FLEET CLOUD</span>
+            <strong>Telemetry Dashboard</strong>
+            <small>Safety analytics & reporting</small>
+          </div>
+          <span class="eq-operator">=</span>
+          <div class="eq-block eq-result">
+            <span class="eq-label label-green">REVENUE MODEL</span>
+            <strong>Per-Vehicle Tier</strong>
+            <small>One-time retrofit + recurring SaaS</small>
+          </div>
+        </div>
+
+        <div class="expansion-matrix mt-6">
+          <div class="exp-tier active-tier">
+            <span class="tier-stage">INITIAL TARGET</span>
+            <h4>Cab & Taxi Fleets</h4>
+            <p>Ride-hailing operators and commercial taxi associations.</p>
+          </div>
+          <div class="exp-tier">
+            <span class="tier-stage">EXPANSION 01</span>
+            <h4>Delivery Logistics</h4>
+            <p>Last-mile e-commerce delivery vans and intra-city cargo.</p>
+          </div>
+          <div class="exp-tier">
+            <span class="tier-stage">EXPANSION 02</span>
+            <h4>Buses & Transport</h4>
+            <p>Corporate shuttles, school buses, and public transport.</p>
+          </div>
+          <div class="exp-tier">
+            <span class="tier-stage">LONG TERM</span>
+            <h4>Consumer Retrofit</h4>
+            <p>Aftermarket safety modules for general car owners.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Team -->
+    <section class="section bg-slate" id="team">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="kicker">THE BUILDERS</span>
+          <h2 class="title-primary">Built by</h2>
+          <p class="lead-paragraph mx-auto">
+            A dedicated student engineering team building SAFAR from concept to working prototype.
+          </p>
+        </div>
+
+        <div class="team-cards-grid">
+          <div class="team-profile-card">
+            <div class="profile-avatar">
+              <span class="avatar-initials">SD</span>
+            </div>
+            <h4>Saksham Dixit</h4>
+            <p class="profile-role">Student Engineering Team</p>
+          </div>
+
+          <div class="team-profile-card">
+            <div class="profile-avatar">
+              <span class="avatar-initials">KA</span>
+            </div>
+            <h4>Krish Agarwal</h4>
+            <p class="profile-role">Student Engineering Team</p>
+          </div>
+
+          <div class="team-profile-card">
+            <div class="profile-avatar">
+              <span class="avatar-initials">YA</span>
+            </div>
+            <h4>Yazdaan Ansari</h4>
+            <p class="profile-role">Student Engineering Team</p>
+          </div>
+        </div>
+
+        <div class="team-links-bar mt-6">
+          <a href="https://github.com/SenorDan031/SAFAR" target="_blank" rel="noreferrer" class="btn btn-outline btn-sm">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span>github.com/SenorDan031/SAFAR</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. Contact / Partnership CTA -->
+    <section class="section section-cta" id="contact">
+      <div class="container text-center">
+        <span class="kicker text-green">COLLABORATE WITH US</span>
+        <h2 class="cta-headline">Want to build safer roads with us?</h2>
+        <p class="cta-lead mx-auto">
+          We are actively looking for mentors, pilot partners, incubators, mobility startups, fleet operators, and researchers working on road safety.
+        </p>
+
+        <div class="cta-actions">
+          <a href="mailto:agarwalpk2301@gmail.com?subject=SAFAR%20Partnership%20Enquiry" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>Contact via Email</span>
+          </a>
+          <a href="https://github.com/SenorDan031/SAFAR" target="_blank" rel="noreferrer" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span>View GitHub Repository</span>
+          </a>
+        </div>
+
+        <div class="contact-meta-info mt-6">
+          <span>Direct Email: <strong>agarwalpk2301@gmail.com</strong></span>
+          <span class="dot-sep">·</span>
+          <span>Open for Mentorship & Fleet Pilot Trials</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand-wrap">
+        <img src="assets/safar-logo.png" alt="SAFAR Logo" class="footer-logo" />
+        <div>
+          <span class="footer-brand-title">SAFAR</span>
+          <p class="footer-brand-sub">Modular Road-Safety Intelligence Framework</p>
+        </div>
+      </div>
+
+      <div class="footer-links-group">
+        <a href="#story">Genesis</a>
+        <a href="#problem">Problem</a>
+        <a href="#framework">Architecture</a>
+        <a href="#achievements">Validation</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#team">Team</a>
+        <a href="https://github.com/SenorDan031/SAFAR" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+
+      <div class="footer-legal">
+        <p>© 2026 SAFAR. Built by Saksham Dixit, Krish Agarwal & Yazdaan Ansari.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

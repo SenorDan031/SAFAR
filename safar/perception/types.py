@@ -5,6 +5,18 @@ from typing import Any, Mapping, Optional, Tuple
 
 
 Point3D = Tuple[float, float, float]
+BBox = Tuple[int, int, int, int]
+
+
+@dataclass(frozen=True)
+class SAFARDetection:
+    """Image-level Phase 1B detection with no invented world measurements."""
+
+    class_name: str
+    confidence: float
+    bbox: BBox
+    category: str
+    source: str = "yolo"
 
 
 @dataclass(frozen=True)

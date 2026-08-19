@@ -1,1 +1,12 @@
+# CARLA is intentionally not listed here: CARLA 0.9.13 is not published on
+# PyPI.  Install its matching wheel/egg from CARLA's PythonAPI distribution
+# into the Python 3.7 CARLA virtual environment instead.
+
+# Keyboard/manual-control window used by safar.run_carla_safar.
 pygame==2.5.2
+
+# Test runner used by the SAFAR test suite.
+pytest==7.4.4
+
+# Phase 1A/1B visual object-detection backend.
+ultralytics>=8.3,<9

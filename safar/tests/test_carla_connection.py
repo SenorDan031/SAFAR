@@ -1,4 +1,5 @@
-import carla
+import pytest
+carla = pytest.importorskip("carla")
 
 
 def main():

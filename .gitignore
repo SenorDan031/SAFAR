@@ -1,20 +1,29 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.pyo
 
 # Virtual environments
 .venv/
-.venv-carla37/
+.venv*/
 venv/
 env/
 
 # IDE
 .vscode/
 .idea/
+*.code-workspace
 
-# Logs
+# Model weights
+*.pt
+*.onnx
+*.engine
+
+# Test artifacts & Logs
+logs/
 *.log
+*.csv
+test_image.jpg
 
 # OS
 .DS_Store
