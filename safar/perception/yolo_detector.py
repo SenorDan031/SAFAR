@@ -24,14 +24,34 @@ class YOLODetector:
         self.model = YOLO(model_path)
         self.confidence_threshold = confidence_threshold
 
+    VALID_ROAD_CLASSES = {"car", "truck", "bus", "motorcycle", "bicycle", "person"}
+
     def detect(self, frame) -> List[YOLODetection]:
-        """Return raw visual detections; no depth or physical distance is inferred."""
+        """Return clean visual road detections; filters out noise and ego-vehicle hood."""
+        if frame is None or frame.size == 0:
+            return []
+        h, w = frame.shape[:2]
         results = self.model.predict(source=frame, conf=self.confidence_threshold, verbose=False)
         if not results or results[0].boxes is None:
             return []
         output = []
         for box in results[0].boxes:
             class_id = int(box.cls[0])
+            name = self.model.names[class_id].lower()
+            if name not in self.VALID_ROAD_CLASSES:
+                continue
+
             x1, y1, x2, y2 = box.xyxy[0].tolist()
-            output.append(YOLODetection(self.model.names[class_id], float(box.conf[0]), (int(x1), int(y1), int(x2), int(y2))))
+            box_w = x2 - x1
+            box_h = y2 - y1
+
+            # Reject tiny background noise
+            if box_w < 15 or box_h < 15:
+                continue
+
+            # Reject ego-vehicle hood at bottom of screen
+            if y2 > (0.88 * h) and box_w > (0.65 * w):
+                continue
+
+            output.append(YOLODetection(name, float(box.conf[0]), (int(x1), int(y1), int(x2), int(y2))))
         return output

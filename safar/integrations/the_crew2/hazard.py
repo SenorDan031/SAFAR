@@ -201,21 +201,25 @@ class TheCrew2HazardEngine:
             h_ratio = bbox_height / max(1, frame_height)
 
             is_approaching = (motion == ApparentMotion.APPROACHING)
-            is_imminent = (h_ratio > 0.40 or y2_ratio > 0.85) and (is_approaching or rel_level == "HIGH")
-            is_close = (h_ratio > 0.22 or y2_ratio > 0.70) or is_approaching
+            is_imminent = (h_ratio > 0.20 or y2_ratio > 0.65) and (rel_level == "HIGH" or (is_approaching and rel_level == "MEDIUM"))
+            is_close = (h_ratio > 0.10 or y2_ratio > 0.50) and rel_level in ("HIGH", "MEDIUM")
 
             if is_imminent and conf_state == ConfirmationState.HAZARD:
                 risk_level = "CRITICAL"
                 decision = "EMERGENCY_BRAKE"
-                reason = f"Imminent {lead_class} #{lead_id} rapidly closing directly in ego path."
-            elif is_close or is_approaching:
+                reason = f"Imminent {lead_class} #{lead_id} directly in ego path (Size: {h_ratio*100:.0f}%). AEB engaged."
+            elif is_close:
                 risk_level = "HIGH"
                 decision = "SLOWDOWN"
                 reason = f"Persistent {lead_class} #{lead_id} approaching within ego corridor."
-            else:
+            elif rel_level in ("HIGH", "MEDIUM"):
                 risk_level = "MEDIUM"
                 decision = "WARN"
                 reason = f"Persistent {lead_class} #{lead_id} detected ahead in path; maintain awareness."
+            else:
+                risk_level = "LOW"
+                decision = "CONTINUE"
+                reason = f"{lead_class} #{lead_id} is outside active path corridor."
 
         return LeadHazardResult(
             lead_track_id=lead_id,

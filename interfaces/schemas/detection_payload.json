@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DetectionPayload",
+  "type": "object",
+  "properties": {
+    "timestamp_us": { "type": "integer" },
+    "frame_id": { "type": "integer" },
+    "ego_speed_mps": { "type": "number" },
+    "detections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "track_id": { "type": "integer" },
+          "class_name": { "type": "string" },
+          "confidence": { "type": "number" },
+          "bbox_normalized": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "center_x": { "type": "number" },
+          "bottom_y": { "type": "number" }
+        },
+        "required": ["track_id", "class_name", "confidence", "bbox_normalized", "center_x", "bottom_y"]
+      }
+    }
+  },
+  "required": ["timestamp_us", "frame_id", "ego_speed_mps", "detections"]
+}

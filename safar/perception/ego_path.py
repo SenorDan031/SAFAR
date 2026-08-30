@@ -21,3 +21,6 @@ class EgoPathModel:
             return PathRelevance(score,level,True,'bbox lower centre is inside ego corridor')
         gap=min(abs(x-left),abs(x-right)); score=max(0,1-gap/.2)
         return PathRelevance(score,PathLevel.LOW if score else PathLevel.NONE,False,'bbox lower centre is outside ego corridor')
+
+    def evaluate(self, bbox, width, height):
+        return self.relevance_for_bbox(bbox, width, height)

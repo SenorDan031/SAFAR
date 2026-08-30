@@ -19,10 +19,23 @@ env/
 *.onnx
 *.engine
 
+# C++ Build artifacts
+safar_core/build/
+build/
+bin/
+*.obj
+*.lib
+*.pdb
+*.exe
+*.tlog
+*.lastbuildstate
+*.recipe
+
 # Test artifacts & Logs
 logs/
 *.log
 *.csv
+!data/pothole_dataset.csv
 test_image.jpg
 
 # OS

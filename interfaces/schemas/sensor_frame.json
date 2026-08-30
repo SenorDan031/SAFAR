@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SensorFrameMetadata",
+  "type": "object",
+  "properties": {
+    "timestamp_us": { "type": "integer" },
+    "frame_id": { "type": "integer" },
+    "ego_speed_mps": { "type": "number" },
+    "ego_heading_deg": { "type": "number" },
+    "image_format": { "type": "string", "enum": ["jpeg", "png", "rgb24"] },
+    "image_bytes_len": { "type": "integer" }
+  },
+  "required": ["timestamp_us", "frame_id", "ego_speed_mps", "image_format", "image_bytes_len"]
+}

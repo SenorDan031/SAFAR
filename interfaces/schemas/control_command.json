@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ControlCommand",
+  "type": "object",
+  "properties": {
+    "timestamp_us": { "type": "integer" },
+    "frame_id": { "type": "integer" },
+    "threat_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+    "decision": { "type": "string", "enum": ["CONTINUE", "WARN", "SLOWDOWN", "EMERGENCY_BRAKE"] },
+    "control": {
+      "type": "object",
+      "properties": {
+        "throttle": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "brake": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "steering": { "type": "number", "minimum": -1.0, "maximum": 1.0 },
+        "emergency_stop": { "type": "boolean" }
+      },
+      "required": ["throttle", "brake", "steering", "emergency_stop"]
+    },
+    "hud_message": { "type": "string" },
+    "latency_ms": { "type": "number" }
+  },
+  "required": ["timestamp_us", "frame_id", "threat_score", "decision", "control", "hud_message", "latency_ms"]
+}
