@@ -1,7 +1,7 @@
 ## Day 5 - Physics-Aware Pothole Intelligence & UE5 Closed-Loop Safety Integration
 
 **Date of Log:** [30/08/2026]  
-**Log Author:** [Yazdaan Ansari](https://github.com/SenorDan031)  
+**Log Author:** [Krish Agarwal](https://github.com/Krishagarwal558)  
 ---
 
 ### 1. Robust Physics-Aware Pothole Safety System
