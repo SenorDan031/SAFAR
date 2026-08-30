@@ -1,3 +1,29 @@
+## Day 5 - Physics-Aware Pothole Intelligence & UE5 Closed-Loop Safety Integration
+
+**Date of Log:** [30/08/2026]  
+**Log Author:** [Yazdaan Ansari](https://github.com/SenorDan031)  
+---
+
+### 1. Robust Physics-Aware Pothole Safety System
+- **Decoupled Architecture**: Refactored the pothole system into modular layers: `validation`, `model`, `classifier`, `physics`, `path`, `risk`, `decision`, `simulation`.
+- **Data Validation Layer**: Added strict physical boundary checking to sanitize input dimensions, rejecting NaNs, infinite values, and negative dimensions without causing false interventions.
+- **ML Model Benchmarking**: Evaluated Decision Trees, Random Forest, Extra Trees, and Gradient Boosting on `pothole_dataset.csv` using stratified 5-fold cross-validation.
+- **Production Classifier**: Selected Gradient Boosting achieving **99.0% test accuracy**, **99.4% 5-fold CV**, and **100% recall on severe craters** with calibrated confidence estimation.
+- **Kinematic Physics Engine**: Implemented dynamic stopping distance $d_{\text{stop}} = v \cdot t_{\text{react}} + \frac{v^2}{2a}$, required buffer margins, and time-to-pothole ($t = \frac{d}{v}$).
+- **Driving Corridor Geometry**: Built lateral envelope tracking ($|Y| \le 1.05\text{m}$) ensuring potholes outside the vehicle's driving path never trigger braking.
+- **State Machine with Hysteresis**: Added `MAINTAIN` $\to$ `MONITOR` $\to$ `SLOW` $\to$ `BRAKE` $\to$ `EMERGENCY_BRAKE` with temporal confirmation ($\ge 2$ frames) and anti-jitter hold timers.
+- **Verification**: Validated 100% pass rate across the 12-scenario deterministic benchmark suite and built interactive standalone CLI (`safar.pothole.main`).
+
+### 2. Unreal Engine 5 Closed-Loop Vehicle Safety Integration
+- **Passive Driver Principle**: Configured SAFAR to silently observe during normal driving, leaving 100% authoritative control to the player until an imminent physical hazard is confirmed.
+- **Chaos Vehicle Reverse Gear Fix**: Implemented speed-gated service braking ($Speed > 0.5\text{ m/s}$) and stationary handbrake locking ($Speed \le 0.5\text{ m/s}$) to prevent Chaos automatic transmission from shifting into reverse.
+- **Traffic Isolation & Self-Exclusion**: Filtered ego vehicle out of ground-truth perception queries and isolated SAFAR actuation strictly to player-controlled pawns, ensuring ambient AI traffic runs without interference.
+
+---
+
+## END OF Dlog
+---
+
 ## Day 4 - Advanced Detection system and Enhanced Logic Engine
 
 **Date of Log:** [14/08/2026]  
