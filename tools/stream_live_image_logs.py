@@ -1,6 +1,12 @@
 """
 SAFAR Real-Time Console Telemetry Streamer
-Streams live frame-by-frame diagnostic and safety decision logs for the uploaded images.
+With Full P0 & P1 Enhancements:
+- Exact Causal Reason Chains (threat -> distance -> TTC -> d_stop -> required decel -> intervention)
+- Left/Right Wheel Track Geometry Overlap
+- Continuous Stopping Distance Risk Scaling
+- Pothole Kinematic TTC
+- Cohesive Candidate Filtering
+- Unified Multi-Threat Arbitration
 """
 
 import os
@@ -19,15 +25,18 @@ if sys.platform == "win32":
                 pass
 
 import time
+from typing import List, Dict, Any, Tuple
 import cv2
 import numpy as np
 from ultralytics import YOLO
 
-from safar.pothole.classifier import PotholeClassifier
+from safar.pothole.classifier import PotholeClassifier, PotholeObservation
 from safar.pothole.physics import PotholePhysicsEngine
 from safar.pothole.path import PotholePathGeometry, PathIntersectionStatus
 from safar.pothole.risk import PotholeRiskEngine, PotholeSeverity
 from safar.pothole.decision import PotholeDecisionEngine
+from safar.pothole.tracker import PotholeTemporalTracker
+from safar.pothole.arbitration import MultiThreatArbitrationEngine, UnifiedThreatItem
 
 CAMERA_FOCAL_LENGTH_PX = 720.0
 
@@ -45,7 +54,7 @@ REAL_HEIGHTS_M = {
 }
 
 
-def print_divider(char="=", length=80):
+def print_divider(char="=", length=85):
     print(char * length)
 
 
@@ -58,38 +67,38 @@ def stream_logs():
         (5, "Flooded Monsoon Road with Auto-Rickshaw & Deep Craters", r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616014.jpg")
     ]
 
-    print("\n" + "=" * 80)
-    print(" 🚀 SAFAR REAL-TIME TELEMETRY & MULTI-HAZARD SAFETY REASONING ENGINE")
-    print("=" * 80)
+    print("\n" + "=" * 85)
+    print(" 🚀 SAFAR REAL-TIME TELEMETRY STREAM WITH P0/P1 REASONING ENGINE")
+    print("=" * 85)
     print(" [INIT] Initializing Computer Vision Models...")
     yolo_model = YOLO("yolo11n.pt")
     print(" [INIT] Initializing Gradient Boosting Pothole Classifier...")
     pothole_classifier = PotholeClassifier()
-    print(" [INIT] Initializing Kinematic Physics & Path Geometry Engines...")
+    print(" [INIT] Initializing Kinematic Physics, Path Geometry & Arbitration Engines...")
     physics = PotholePhysicsEngine()
     path_geometry = PotholePathGeometry()
     risk_engine = PotholeRiskEngine(physics, path_geometry)
     decision_engine = PotholeDecisionEngine()
-    print(" [INIT] System Ready. Streaming live telemetry logs for 5 frames...\n")
+    tracker = PotholeTemporalTracker()
+    arbitrator = MultiThreatArbitrationEngine()
+    print(" [INIT] Pipeline Active. Streaming live diagnostic telemetry...\n")
 
     ego_speed_mps = 12.0  # 43.2 km/h
     d_stop = physics.calculate_stopping_distance(ego_speed_mps)
 
     for frame_idx, scene_title, img_path in image_paths:
         t0 = time.time()
-        print_divider("-", 80)
+        print_divider("-", 85)
         print(f" ▶ FRAME #{frame_idx} | SCENE: {scene_title}")
         print(f"   Timestamp: {time.strftime('%H:%M:%S')}.{int((t0 % 1) * 1000):03d} | File: {os.path.basename(img_path)}")
         print(f"   Ego Kinematics: Speed = {ego_speed_mps*3.6:.1f} km/h ({ego_speed_mps:.1f} m/s) | Stopping Distance d_stop = {d_stop:.2f} m")
-        print_divider("-", 80)
+        print_divider("-", 85)
 
-        # 1. Image Ingestion
         img = cv2.imread(img_path)
         if img is None:
-            print(f"   [ERROR] Failed to load image: {img_path}")
             continue
         h, w = img.shape[:2]
-        print(f"   [1. CAMERA ACQUISITION] Resolution: {w}x{h} px | Camera Mount: H = 1.35m, Focal = 720px")
+        print(f"   [1. CAMERA ACQUISITION] Resolution: {w}x{h} px | Mount: H = 1.35m, Focal = 720px")
 
         # 2. YOLO Object Detection
         t_yolo_start = time.time()
@@ -150,7 +159,7 @@ def stream_logs():
             refined_dets.append(d)
 
         print(f"   [2. DYNAMIC PERCEPTION] Detected {len(refined_dets)} entities (Inference Time: {t_yolo_dur:.1f}ms):")
-        dynamic_threats = []
+        dynamic_objects = []
         for idx, d in enumerate(refined_dets, 1):
             x1, y1, x2, y2 = d["bbox"]
             box_h = max(1, y2 - y1)
@@ -161,28 +170,39 @@ def stream_logs():
             in_corridor = abs(lat_x) <= 1.85
             ttc = dist_z / ego_speed_mps if in_corridor else 99.0
 
-            status_tag = "🔴 [IN CORRIDOR - THREAT]" if (in_corridor and dist_z < d_stop * 1.25) else "🟡 [IN PATH - MONITOR]" if in_corridor else "🟢 [PATH CLEAR]"
+            status_tag = "🔴 [IN CORRIDOR - THREAT]" if (in_corridor and dist_z <= d_stop * 1.25) else "🟡 [IN PATH - MONITOR]" if in_corridor else "🟢 [PATH CLEAR]"
             print(f"      #{idx:<2} {d['class'].upper():<16} | Conf: {d['confidence']*100:4.1f}% | Dist: {dist_z:5.1f}m | Lat: {lat_x:+5.2f}m | TTC: {ttc:4.1f}s | {status_tag}")
 
-            if in_corridor:
-                dynamic_threats.append({"class": d["class"], "dist_z": dist_z, "lat_x": lat_x, "ttc": ttc})
+            dynamic_objects.append({
+                "id": idx,
+                "class": d["class"],
+                "confidence": d["confidence"],
+                "distance_forward_m": dist_z,
+                "distance_lateral_m": lat_x,
+                "in_corridor": in_corridor,
+                "ttc_s": ttc
+            })
 
-        # 3. Pothole / Surface Optical Segmentation & Risk
+        # 3. P1 Cohesive Road Surface Candidate Filtering
         road_roi = img[int(h * 0.45):h, :]
         gray = cv2.cvtColor(road_roi, cv2.COLOR_BGR2GRAY)
-        blurred = cv2.GaussianBlur(gray, (7, 7), 0)
+        blurred = cv2.GaussianBlur(gray, (9, 9), 0)
         _, d_th = cv2.threshold(blurred, 65, 255, cv2.THRESH_BINARY_INV)
         _, b_th = cv2.threshold(blurred, 190, 255, cv2.THRESH_BINARY)
-        mask = cv2.bitwise_or(d_th, b_th)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
-        cleaned = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-        contours, _ = cv2.findContours(cleaned, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        raw_mask = cv2.bitwise_or(d_th, b_th)
+        close_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (21, 15))
+        merged_mask = cv2.morphologyEx(raw_mask, cv2.MORPH_CLOSE, close_kernel)
+        open_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+        cleaned_mask = cv2.morphologyEx(merged_mask, cv2.MORPH_OPEN, open_kernel)
+        contours, _ = cv2.findContours(cleaned_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        pothole_threats = []
-        print(f"   [3. ROAD SURFACE ANALYSIS] Segmented {len(contours)} candidate surface regions:")
+        pothole_obs_list = []
+        pothole_assessments = []
+        print(f"   [3. ROAD SURFACE ANALYSIS] Segmented {len(contours)} cohesive candidate surface regions:")
+
         for p_idx, c in enumerate(contours, 1):
             area = cv2.contourArea(c)
-            if area < 800 or area > (w * (h * 0.55) * 0.45):
+            if area < 1500 or area > (w * (h * 0.55) * 0.40):
                 continue
             x, y, bw, bh = cv2.boundingRect(c)
             global_y = int(h * 0.45) + y
@@ -192,56 +212,43 @@ def stream_logs():
             lat_x = ((x + bw*0.5 - w*0.5) * dist_z) / CAMERA_FOCAL_LENGTH_PX
             est_w = (bw * dist_z) / CAMERA_FOCAL_LENGTH_PX
             est_l = (bh * dist_z * 1.5) / CAMERA_FOCAL_LENGTH_PX
-            est_d = min(0.20, max(0.015, (area / (w * (h * 0.55))) * 0.35))
+            
+            roi_patch = gray[y:y+bh, x:x+bw]
+            std_dev = float(np.std(roi_patch)) if roi_patch.size > 0 else 20.0
+            est_d = min(0.22, max(0.015, (area / (w * (h * 0.55))) * 0.38 + (std_dev / 255.0) * 0.09))
 
             obs = pothole_classifier.classify(est_w, est_l, est_d, dist_z, lat_x, p_idx)
+            pothole_obs_list.append(obs)
+
             risk = risk_engine.assess_risk(obs, vehicle_speed_mps=ego_speed_mps)
+            pothole_assessments.append(risk)
 
             p_tag = "🔴 [CRITICAL CRATER]" if risk.severity == PotholeSeverity.CRITICAL else "🟠 [HIGH RISK]" if risk.severity == PotholeSeverity.HIGH else "🟢 [DRIVABLE/SAFE]"
-            print(f"      P#{p_idx:<2} {obs.pothole_name:<14} | Dim: {est_w:.1f}x{est_l:.1f}m (Depth:{est_d*100:.0f}cm) | Dist: {dist_z:5.1f}m | Lat: {lat_x:+5.2f}m | Risk: {risk.risk_score:4.2f} ({risk.severity.value}) | {p_tag}")
+            print(f"      P#{p_idx:<2} {obs.pothole_name:<14} | Dim: {est_w:4.1f}x{est_l:4.1f}m (Depth:{est_d*100:2.0f}cm) | Dist: {dist_z:5.1f}m | Lat: {lat_x:+5.2f}m | TTC: {risk.time_to_pothole_s:4.1f}s | Strike: {risk.strike_location:<11} | {p_tag}")
 
-            if risk.path_intersection == PathIntersectionStatus.INTERSECTION and risk.severity in [PotholeSeverity.CRITICAL, PotholeSeverity.HIGH]:
-                pothole_threats.append({"type": obs.pothole_name, "dist_z": dist_z, "depth_cm": est_d*100, "severity": risk.severity.value, "risk_score": risk.risk_score})
+        # 4. P1 Temporal Tracking Step
+        active_tracks = tracker.update(pothole_obs_list, vehicle_speed_mps=ego_speed_mps, current_timestamp=time.time())
 
-        # 4. Multi-Hazard Arbitration & Decision
-        crit_dyn = [v for v in dynamic_threats if v["dist_z"] <= d_stop * 1.25]
-        crit_ph = [p for p in pothole_threats if p["dist_z"] <= d_stop * 1.25]
-
-        if crit_dyn:
-            target_veh = min(crit_dyn, key=lambda v: v["dist_z"])
-            state = "EMERGENCY_BRAKE" if target_veh["dist_z"] <= d_stop else "BRAKE"
-            override = True
-            primary = f"{target_veh['class'].upper()} in corridor at {target_veh['dist_z']:.1f}m"
-            reason = f"Imminent collision threat in driving corridor (Distance: {target_veh['dist_z']:.1f}m <= d_stop: {d_stop:.1f}m, TTC: {target_veh['ttc']:.1f}s)"
-        elif crit_ph:
-            target_ph = min(crit_ph, key=lambda p: p["dist_z"])
-            state = "EMERGENCY_BRAKE" if target_ph["severity"] == "CRITICAL" else "BRAKE"
-            override = True
-            primary = f"{target_ph['type']} in path at {target_ph['dist_z']:.1f}m ({target_ph['depth_cm']:.0f}cm deep)"
-            reason = f"Severe road surface hazard in driving path (Distance: {target_ph['dist_z']:.1f}m <= d_stop: {d_stop:.1f}m, Risk: {target_ph['risk_score']:.2f})"
-        elif dynamic_threats or pothole_threats:
-            state = "SLOW"
-            override = False
-            primary = "Approaching traffic / road anomaly"
-            reason = "Moderating approach speed to safe margin for surface/traffic conditions."
-        else:
-            state = "MAINTAIN"
-            override = False
-            primary = "Path Clear"
-            reason = "Corridor clear. Player retains 100% authoritative manual control."
+        # 5. P1 Multi-Threat Arbitration Engine
+        primary_threat, all_unified, decision = arbitrator.arbitrate(
+            dynamic_objects=dynamic_objects,
+            pothole_assessments=pothole_assessments,
+            ego_speed_mps=ego_speed_mps,
+            stopping_distance_m=d_stop
+        )
 
         total_latency_ms = (time.time() - t0) * 1000
-        print(f"\n   [4. SAFAR DECISION ARBITRATION]")
-        print(f"      ► SYSTEM STATE   : {state}")
-        print(f"      ► CONTROL MODE   : {'⚠️ ACTIVE OVERRIDE (Brake = 1.0, Throttle = 0.0)' if override else '✅ PASSIVE (Driver in Full Control)'}")
-        print(f"      ► PRIMARY THREAT : {primary}")
-        print(f"      ► ACTION REASON  : {reason}")
+        print(f"\n   [4. SAFAR MULTI-THREAT ARBITRATION & DECISION]")
+        print(f"      ► SYSTEM STATE   : {decision.state.value}")
+        print(f"      ► CONTROL MODE   : {'⚠️ ACTIVE OVERRIDE (Brake = 1.0, Throttle = 0.0)' if decision.has_intervention else '✅ PASSIVE (Driver in Full Control)'}")
+        print(f"      ► PRIMARY THREAT : [{primary_threat.source_type.value}] {primary_threat.class_name.upper()} at {primary_threat.distance_forward_m:.1f}m (TTC: {primary_threat.ttc_s:.2f}s, Risk: {primary_threat.risk_score:.2f})")
+        print(f"      ► CAUSAL REASON  : {decision.reason}")
         print(f"      ► PIPELINE TIME  : {total_latency_ms:.1f} ms ({1000.0/total_latency_ms:.1f} FPS equivalent)\n")
         time.sleep(0.4)
 
-    print("=" * 80)
-    print(" ✅ ALL 5 FRAMES PROCESSED IN REAL TIME. FULL TELEMETRY STREAM COMPLETE.")
-    print("=" * 80 + "\n")
+    print("=" * 85)
+    print(" ✅ FULL MULTI-HAZARD REAL-TIME TELEMETRY STREAM COMPLETE.")
+    print("=" * 85 + "\n")
 
 
 if __name__ == "__main__":

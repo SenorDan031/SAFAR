@@ -8,12 +8,18 @@ UNKNOWN_CLASS_ID = -1
 
 # Vehicle Physics Constants
 DEFAULT_REACTION_TIME_S = 0.18          # Perception + decision + actuator latency (seconds)
+REACTION_TIME_S = DEFAULT_REACTION_TIME_S
 NOMINAL_DECELERATION_MPS2 = 6.0         # Normal controlled braking (m/s^2)
+DECEL_NOMINAL_MPS2 = NOMINAL_DECELERATION_MPS2
 EMERGENCY_DECELERATION_MPS2 = 8.5       # Maximum emergency braking (m/s^2)
+DECEL_EMERGENCY_MPS2 = EMERGENCY_DECELERATION_MPS2
 SAFETY_MARGIN_M = 2.0                   # Buffer distance to stop before pothole (meters)
+STOPPING_DISTANCE_MARGIN_M = SAFETY_MARGIN_M
 
 # Geometry and Corridor
 EGO_CORRIDOR_HALF_WIDTH_M = 1.05        # Half-width of vehicle collision envelope (meters)
+VEHICLE_HALF_WIDTH_M = EGO_CORRIDOR_HALF_WIDTH_M
+LANE_HALF_WIDTH_M = 1.75                # Standard lane half-width (meters)
 PATH_LOOKAHEAD_HORIZON_S = 1.5          # Trajectory lookahead time (seconds)
 
 # Temporal Confirmation & Hysteresis

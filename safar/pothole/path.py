@@ -1,100 +1,135 @@
 """
-SAFAR Pothole Ego Path Corridor and Geometry Analysis
-Determines spatial relevance and collision envelope overlap.
+SAFAR Pothole Ego Corridor and Wheel Path Intersection Geometry
+Tracks Left Wheel Track, Right Wheel Track, and Undercarriage Overlap.
 """
 
+import math
 from enum import Enum
 from dataclasses import dataclass
-from typing import Tuple
-from .config import EGO_CORRIDOR_HALF_WIDTH_M, PATH_LOOKAHEAD_HORIZON_S
+from typing import Tuple, Dict, Any
+from .config import VEHICLE_HALF_WIDTH_M, LANE_HALF_WIDTH_M
 
 
 class PathIntersectionStatus(Enum):
     PATH_CLEAR = "PATH_CLEAR"
     POSSIBLE_INTERSECTION = "POSSIBLE_INTERSECTION"
     INTERSECTION = "INTERSECTION"
+    LEFT_WHEEL_STRIKE = "LEFT_WHEEL_STRIKE"
+    RIGHT_WHEEL_STRIKE = "RIGHT_WHEEL_STRIKE"
+    UNDERCARRIAGE_STRIKE = "UNDERCARRIAGE_STRIKE"
 
 
 @dataclass
-class CorridorEvaluation:
+class PotholeCorridorEvaluation:
+    """
+    Detailed geometric breakdown of road hazard vs vehicle wheel tracks.
+    """
     status: PathIntersectionStatus
-    overlap_amount_m: float
-    lateral_offset_m: float
     is_directly_in_path: bool
-    is_relevant: bool
+    is_wheel_strike: bool
+    strike_location: str          # "LEFT_WHEEL", "RIGHT_WHEEL", "UNDERCARRIAGE", "MARGIN", "CLEAR"
+    lateral_overlap_m: float      # Metric width of overlap in meters
+    lateral_offset_m: float       # Centerline offset
+    pothole_span: Tuple[float, float]
+    vehicle_envelope: Tuple[float, float]
 
 
 class PotholePathGeometry:
     """
-    Evaluates geometric intersection between predicted vehicle corridor and pothole footprint.
+    Evaluates exact spatial collision geometry between pothole coordinates and vehicle chassis/wheels.
     """
 
     def __init__(
         self,
-        corridor_half_width_m: float = EGO_CORRIDOR_HALF_WIDTH_M,
-        lookahead_horizon_s: float = PATH_LOOKAHEAD_HORIZON_S
+        vehicle_half_width_m: float = VEHICLE_HALF_WIDTH_M,
+        lane_half_width_m: float = LANE_HALF_WIDTH_M,
+        track_width_m: float = 1.60,
+        tire_width_m: float = 0.25,
+        ground_clearance_m: float = 0.16
     ):
-        self.corridor_half_width_m = corridor_half_width_m
-        self.lookahead_horizon_s = lookahead_horizon_s
+        self.vehicle_half_width_m = vehicle_half_width_m
+        self.lane_half_width_m = lane_half_width_m
+        self.track_width_m = track_width_m
+        self.tire_width_m = tire_width_m
+        self.ground_clearance_m = ground_clearance_m
+
+        # Tire Track Coordinates
+        self.left_wheel_center = -0.5 * track_width_m   # e.g. -0.80m
+        self.right_wheel_center = 0.5 * track_width_m   # e.g. +0.80m
+        self.left_tire_span = (self.left_wheel_center - 0.5 * tire_width_m, self.left_wheel_center + 0.5 * tire_width_m)
+        self.right_tire_span = (self.right_wheel_center - 0.5 * tire_width_m, self.right_wheel_center + 0.5 * tire_width_m)
 
     def evaluate_intersection(
         self,
         distance_forward_m: float,
         distance_lateral_m: float,
         pothole_width_m: float,
-        vehicle_speed_mps: float,
+        pothole_depth_m: float = 0.04,
+        vehicle_speed_mps: float = 10.0,
         steering_angle_rad: float = 0.0
-    ) -> CorridorEvaluation:
+    ) -> PotholeCorridorEvaluation:
         """
-        Determines whether the pothole footprint overlaps the vehicle's driving envelope.
+        Calculates exact wheel strike and corridor envelope intersection.
         """
-        # Behind the vehicle
-        if distance_forward_m < -0.5:
-            return CorridorEvaluation(
-                status=PathIntersectionStatus.PATH_CLEAR,
-                overlap_amount_m=0.0,
-                lateral_offset_m=distance_lateral_m,
-                is_directly_in_path=False,
-                is_relevant=False
-            )
+        # Dynamic path curvature projection based on steering angle
+        if abs(steering_angle_rad) > 0.01 and vehicle_speed_mps > 0.5:
+            curve_offset = 0.5 * (vehicle_speed_mps ** 2 / 2.5) * math.tan(steering_angle_rad) * (distance_forward_m / max(1.0, vehicle_speed_mps))
+            eff_lateral = distance_lateral_m - curve_offset
+        else:
+            eff_lateral = distance_lateral_m
 
-        # Compute predicted lateral offset of ego center at target distance
-        time_to_reach = distance_forward_m / vehicle_speed_mps if vehicle_speed_mps > 0.5 else 0.0
-        predicted_ego_lat_shift = vehicle_speed_mps * time_to_reach * steering_angle_rad * 0.5
+        half_pw = max(0.05, pothole_width_m * 0.5)
+        p_min = eff_lateral - half_pw
+        p_max = eff_lateral + half_pw
 
-        effective_lateral_offset = distance_lateral_m - predicted_ego_lat_shift
+        v_min = -self.vehicle_half_width_m
+        v_max = self.vehicle_half_width_m
 
-        # Pothole lateral span [min_y, max_y]
-        half_ph_width = max(0.05, pothole_width_m * 0.5)
-        ph_left = effective_lateral_offset - half_ph_width
-        ph_right = effective_lateral_offset + half_ph_width
+        # Calculate overlap with whole vehicle envelope
+        overlap = max(0.0, min(p_max, v_max) - max(p_min, v_min))
 
-        # Ego vehicle corridor span [-W_ego/2, +W_ego/2]
-        ego_left = -self.corridor_half_width_m
-        ego_right = self.corridor_half_width_m
+        # Check Left Wheel Strike
+        left_overlap = max(0.0, min(p_max, self.left_tire_span[1]) - max(p_min, self.left_tire_span[0]))
+        right_overlap = max(0.0, min(p_max, self.right_tire_span[1]) - max(p_min, self.right_tire_span[0]))
 
-        # Calculate overlap
-        overlap_min = max(ph_left, ego_left)
-        overlap_max = min(ph_right, ego_right)
-        overlap_amount = max(0.0, overlap_max - overlap_min)
-
-        if overlap_amount > 0.15:
+        if left_overlap > 0.05 and right_overlap > 0.05:
             status = PathIntersectionStatus.INTERSECTION
+            strike_loc = "BOTH_WHEELS"
+            is_wheel = True
             is_in_path = True
-            is_relevant = True
-        elif overlap_amount > 0.0 or abs(effective_lateral_offset) <= (self.corridor_half_width_m + half_ph_width + 0.3):
+        elif left_overlap > 0.05:
+            status = PathIntersectionStatus.LEFT_WHEEL_STRIKE
+            strike_loc = "LEFT_WHEEL"
+            is_wheel = True
+            is_in_path = True
+        elif right_overlap > 0.05:
+            status = PathIntersectionStatus.RIGHT_WHEEL_STRIKE
+            strike_loc = "RIGHT_WHEEL"
+            is_wheel = True
+            is_in_path = True
+        elif overlap > 0.10:
+            status = PathIntersectionStatus.UNDERCARRIAGE_STRIKE
+            strike_loc = "UNDERCARRIAGE"
+            is_wheel = False
+            is_in_path = True
+        elif abs(eff_lateral) <= self.lane_half_width_m:
             status = PathIntersectionStatus.POSSIBLE_INTERSECTION
+            strike_loc = "MARGIN"
+            is_wheel = False
             is_in_path = False
-            is_relevant = True
         else:
             status = PathIntersectionStatus.PATH_CLEAR
+            strike_loc = "CLEAR"
+            is_wheel = False
             is_in_path = False
-            is_relevant = False
 
-        return CorridorEvaluation(
+        return PotholeCorridorEvaluation(
             status=status,
-            overlap_amount_m=overlap_amount,
-            lateral_offset_m=effective_lateral_offset,
             is_directly_in_path=is_in_path,
-            is_relevant=is_relevant
+            is_wheel_strike=is_wheel,
+            strike_location=strike_loc,
+            lateral_overlap_m=overlap,
+            lateral_offset_m=eff_lateral,
+            pothole_span=(p_min, p_max),
+            vehicle_envelope=(v_min, v_max)
         )
