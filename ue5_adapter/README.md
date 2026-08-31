@@ -1,6 +1,6 @@
 # SAFAR Unreal Engine 5 Simulation Integration Guide
 
-This guide describes how to connect **Unreal Engine 5 (UE5)** with the SAFAR AI Perception & Decision Pipeline.
+This guide describes how the **Unreal Engine 5 (UE5)** Chaos Vehicle simulation connects directly with the SAFAR AI Perception & Decision Pipeline.
 
 ---
 
@@ -9,55 +9,48 @@ This guide describes how to connect **Unreal Engine 5 (UE5)** with the SAFAR AI 
 ```
 [UE5 Chaos Vehicle]
        │
-       ├─► SceneCaptureComponent2D (Virtual Camera) ──► TCP Socket (Port 9001) ──► Python Perception
+       ├─► USAFARSensorComponent ──► USAFARCommunicationComponent (TCP Port 9001) ──► Python Perception
        │
-       └─◄ Set Throttle / Set Brake (Actuator Override) ◄── UDP Socket (Port 9003) ◄── C++ SAFAR Core
+       └─◄ USAFARControlComponent ◄── USAFARCommunicationComponent (UDP Port 9003) ◄── C++ SAFAR Core
 ```
 
 ---
 
-## 2. UE5 Scene Setup
+## 2. Implemented UE5 C++ Components
 
-### A. Add a Chaos Vehicle
-1. Create a new UE5 Project using the **Vehicle Template** (or open an existing Automotive scene).
-2. Ensure the vehicle uses the **Chaos Vehicle Movement Component**.
+All components are located in [`ue5_adapter/components/`](file:///C:/Users/shrey/OneDrive/Desktop/Projects/SAFAR/ue5_adapter/components/):
 
-### B. Add a Virtual RGB Camera
-1. Attach a **`SceneCaptureComponent2D`** to the front bumper or windshield of the vehicle.
-2. Set `Capture Source` to `SceneColor (HDR) in RGB, Inv Opacity in A` or `Final Color (LDR) in RGB`.
-3. Create a **`TextureRenderTarget2D`** (e.g. `RT_FrontCamera`) with resolution `640x480` or `1280x720` and assign it to the Scene Capture component.
+1. **`USAFARSensorComponent`** (`SAFARSensorComponent.h` / `SAFARSensorComponent.cpp`):
+   * Captures raw camera frame buffers from `USceneCaptureComponent2D` (`TextureRenderTarget2D`).
+   * Encodes frames as JPEG at decoupled target FPS (default 30–60 FPS) without blocking game rendering.
+   * Extracts metric IMU telemetry (`VehicleVelocity`, `VehicleSpeedKmh`, `VehicleAcceleration`, `VehicleHeadingDeg`) from `UChaosWheeledVehicleMovementComponent`.
 
-### C. Stream Virtual Camera Frames (Port 9001)
-Use Unreal Engine's C++ Socket API or a TCP Socket Plugin to send each rendered frame buffer to Python:
-- **Header**: Magic `SFRM` (4 bytes) + `Length` (4 bytes uint32).
-- **Metadata**: JSON containing `timestamp_us`, `frame_id`, `ego_speed_mps`.
-- **Payload**: Compressed JPEG or raw RGB image bytes.
+2. **`USAFARCommunicationComponent`** (`SAFARCommunicationComponent.h` / `SAFARCommunicationComponent.cpp`):
+   * **TCP Client on Port 9001**: Uses a dedicated background worker thread (`FSAFARTcpStreamerWorker`) to send `SFRM` framed packets (`Magic` + `Length` + `Metadata JSON` + `JPEG bytes`) to Python Perception.
+   * **UDP Receiver on Port 9003**: Uses `FUdpSocketReceiver` to parse JSON safety commands from C++ SAFAR Core and dispatch them to the game thread.
 
-### D. Receive Control Commands (Port 9003)
-1. Open a UDP Socket listener on port `9003`.
-2. Parse incoming `ControlCommand` JSON.
-3. Apply values to the vehicle:
-   - **`Set Throttle Input`** (`control.throttle`)
-   - **`Set Brake Input`** (`control.brake`)
-   - **`Set Handbrake Input`** (`control.emergency_stop`)
-4. Draw the **`hud_message`** on the vehicle HUD (e.g. `SAFAR: VEHICLE DETECTED | THREAT: 0.72 | ACTION: WARN`).
+3. **`USAFARControlComponent`** (`SAFARControlComponent.h` / `SAFARControlComponent.cpp`):
+   * **Passive Driver Principle**: Evaluates `ThreatScore` against `InterventionThreshold` ($0.70$). Player retains 100% manual control until an imminent collision requires intervention.
+   * **Reverse-Protection Anti-Roll**: Applies service braking $> 0.5\text{ m/s}$, and locks the handbrake $\le 0.5\text{ m/s}$ to prevent automatic transmissions from creeping or rolling backward on inclines.
+
+4. **`ASAFARVehiclePawn`** & **`ASAFARHUD`**:
+   * Pre-configured Chaos Vehicle pawn with follow camera, windshield virtual camera, and real-time on-screen telemetry overlay.
 
 ---
 
-## 3. Standalone Verification (Without Opening UE5)
+## 3. End-to-End Verification
 
-You can verify the complete pipeline headlessly anytime using the provided mock tools:
+Follow the step-by-step verification checklist in [`ue5_adapter/VERIFICATION.md`](file:///C:/Users/shrey/OneDrive/Desktop/Projects/SAFAR/ue5_adapter/VERIFICATION.md):
 
 ```bash
 # Terminal 1: Start C++ SAFAR Core
 ./safar_core/build/Release/safar_core.exe
 
-# Terminal 2: Start Python Perception Node
+# Terminal 2: Start Python AI Perception Node
 python -m safar_perception.perception_node
 
-# Terminal 3: Start UE5 HUD Receiver
+# Terminal 3: (Optional) Monitor Control Bridge
 python -m ue5_adapter.ue5_receiver
 
-# Terminal 4: Stream simulated frames
-python -m ue5_adapter.mock_ue5_streamer --frames 50
+# Terminal 4: Launch Unreal Engine 5 with ASAFARGameModeBase / ASAFARVehiclePawn
 ```
