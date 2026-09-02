@@ -344,23 +344,37 @@ class SAFARImageVisionTester:
 
 
 def run_test():
-    images = [
-        r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148607178.jpg",
-        r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148615983.jpg",
-        r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616006.jpg",
-        r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616010.jpg",
-        r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616014.jpg"
-    ]
+    import argparse
+    parser = argparse.ArgumentParser(description="SAFAR Multi-Hazard Image Vision & Safety Analyzer")
+    parser.add_argument("images", nargs="*", default=[], help="Optional paths to custom images to analyze")
+    parser.add_argument("--speed", type=float, default=12.0, help="Ego vehicle speed in m/s (default: 12.0 m/s ~ 43 km/h)")
+    parser.add_argument("--outdir", type=str, default=r"C:\Users\shrey\OneDrive\Desktop\Projects\SAFAR\logs\image_test_results", help="Directory to save annotated result images")
+    args = parser.parse_args()
 
-    tester = SAFARImageVisionTester(output_dir=r"C:\Users\shrey\OneDrive\Desktop\Projects\SAFAR\logs\image_test_results")
+    if args.images:
+        images = args.images
+    else:
+        images = [
+            r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148607178.jpg",
+            r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148615983.jpg",
+            r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616006.jpg",
+            r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616010.jpg",
+            r"C:/Users/shrey/.gemini/antigravity/brain/4bb433f6-55ac-41c9-951b-c1ec39074f17/.user_uploaded/media_1788148616014.jpg"
+        ]
+
+    tester = SAFARImageVisionTester(output_dir=args.outdir)
     full_logs = []
 
     print("=" * 75)
-    print(" SAFAR MULTI-HAZARD EVALUATION WITH P0/P1 REFINEMENTS")
+    print(f" SAFAR MULTI-HAZARD IMAGE ANALYSIS (Ego Speed: {args.speed*3.6:.1f} km/h)")
     print("=" * 75)
 
     for idx, img_p in enumerate(images, 1):
-        entry = tester.process_image(img_p, idx, ego_speed_mps=12.0)
+        if not os.path.exists(img_p):
+            print(f"\n[WARNING] Image file not found: {img_p}")
+            continue
+
+        entry = tester.process_image(img_p, idx, ego_speed_mps=args.speed)
         full_logs.append(entry)
         dec = entry["safar_decision"]
         pt = entry["primary_threat"]
@@ -370,13 +384,15 @@ def run_test():
         print(f"  -> Primary Threat  : {pt['class_name'].upper()} at {pt['distance_forward_m']:.1f}m (Risk: {pt['risk_score']:.2f}, Severity: {pt['severity']})")
         print(f"  -> SAFAR Decision  : State = {dec['state']} | Intervention = {dec['has_intervention']}")
         print(f"  -> Causal Reason   : {dec['action_reason']}")
+        print(f"  -> Saved Output    : {entry['annotated_output_path']}")
 
-    log_file_path = r"C:\Users\shrey\OneDrive\Desktop\Projects\SAFAR\logs\safar_image_test_log.json"
+    log_file_path = os.path.join(os.path.dirname(args.outdir), "safar_image_test_log.json")
     with open(log_file_path, "w", encoding="utf-8") as f:
         json.dump(full_logs, f, indent=2)
 
     print("\n" + "=" * 75)
-    print(f" [SUCCESS] Complete P0/P1 pipeline logs saved to: {log_file_path}")
+    print(f" [SUCCESS] Complete analysis log saved to: {log_file_path}")
+    print(f" [SUCCESS] Annotated images with HUD overlays saved to: {args.outdir}")
     print("=" * 75)
 
 

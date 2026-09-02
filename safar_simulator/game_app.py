@@ -6,9 +6,17 @@ clean cockpit dashboard presentation, and invisible 60Hz predictive safety inter
 import time
 import sys
 import os
+import math
 import subprocess
 import threading
 from typing import List, Dict, Tuple, Optional, Any
+
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 from .urban_traffic_manager import UrbanTrafficManager, UrbanActor, TrafficArchetype
 from .engineering_mode import EngineeringModeController, CleanCockpitState
@@ -58,13 +66,13 @@ class SAFARSimulatorApp:
 
         try:
             print("\n======================================================================")
-            print(" 🚗 SAFAR SIMULATOR — REALISTIC URBAN DRIVING SIMULATION 🚗")
+            print(" [SAFAR SIMULATOR] -- REALISTIC URBAN DRIVING SIMULATION")
             print("======================================================================")
-            print(" • Environment: Realistic Urban City Corridor (Left-Hand Traffic)")
-            print(" • Vehicle: BP_VehicleAdvSportsCar (Chaos Physics + Driver Cockpit)")
-            print(" • Sensors: Virtual Stereo Camera Pair (Baseline B = 0.25m | Z = fB/d)")
-            print(" • Traffic: Ambient Cars, Auto-Rickshaws, Bikes, Buses & Pedestrians")
-            print(" • HUD Mode: 100% CLEAN DRIVING (Zero on-screen clutter | F3 for Eng Mode)")
+            print(" * Environment: Realistic Urban City Corridor (Left-Hand Traffic)")
+            print(" * Vehicle: BP_VehicleAdvSportsCar (Chaos Physics + Driver Cockpit)")
+            print(" * Sensors: Virtual Stereo Camera Pair (Baseline B = 0.25m | Z = fB/d)")
+            print(" * Traffic: Ambient Cars, Auto-Rickshaws, Bikes, Buses & Pedestrians")
+            print(" * HUD Mode: 100% CLEAN DRIVING (Zero on-screen clutter | F3 for Eng Mode)")
             print("======================================================================\n")
 
             self.play_simulation()
@@ -234,7 +242,7 @@ class SAFARSimulatorApp:
 
                 current_action = primary_assessment.decision_action if primary_assessment else "CONTINUE"
                 if current_action != prev_decision and current_action in ["SLOWDOWN", "EMERGENCY_BRAKE"]:
-                    print(f"\n[SAFAR ADAS] ⚡ {primary_assessment.reason}")
+                    print(f"\n[SAFAR ADAS] [!ALERT] {primary_assessment.reason}")
 
                 prev_decision = current_action
 
