@@ -14,6 +14,8 @@ from .physics import PotholePhysicsEngine
 from .path import PotholePathGeometry, PathIntersectionStatus
 from .risk import PotholeRiskEngine, PotholeRiskAssessment, PotholeSeverity
 from .decision import PotholeDecisionEngine, PotholeDecision, PotholeAction
+from .speed_manager import PotholeSpeedManager, PotholeActionPlan
+from .road_simulator import simulate_road
 
 __all__ = [
     "PotholeDataValidator",
@@ -28,6 +30,9 @@ __all__ = [
     "PotholeDecisionEngine",
     "PotholeDecision",
     "PotholeAction",
+    "PotholeSpeedManager",
+    "PotholeActionPlan",
+    "simulate_road",
     "CONFIDENCE_THRESHOLD",
     "CLASS_ID_TO_LABEL",
     "CLASS_LABEL_TO_ID"

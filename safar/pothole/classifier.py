@@ -87,11 +87,28 @@ class PotholeClassifier:
                 timestamp=timestamp
             )
 
-        # 2. Model Availability Check
+        # 2. Physical boundary: Flat road surface with negligible depth is drivable_path (0)
+        if depth <= 0.008 or (width <= 0.05 and depth <= 0.010):
+            return PotholeObservation(
+                pothole_id=pothole_id,
+                pothole_type=0,
+                pothole_name=CLASS_ID_TO_LABEL[0],
+                width=width,
+                length=length,
+                depth=depth,
+                confidence=0.99,
+                distance_forward=distance_forward,
+                distance_lateral=distance_lateral,
+                is_valid=True,
+                status="CONFIDENT",
+                timestamp=timestamp
+            )
+
+        # 3. Model Availability Check
         if self.model is None:
             return self._heuristic_fallback(width, length, depth, distance_forward, distance_lateral, pothole_id, timestamp)
 
-        # 3. Model Inference with Calibrated Probabilities
+        # 4. Model Inference with Calibrated Probabilities
         features_df = pd.DataFrame([[width, length, depth]], columns=self.feature_names)
         predicted_class = int(self.model.predict(features_df)[0])
 
